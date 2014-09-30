@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" name="cache">
+
+	<diskStore path="java.io.tmpdir/ehcache/haze/cache" />
+
+	<!-- DefaultCache setting. -->
+	<defaultCache eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"
+		overflowToDisk="true"/>
+
+	<cache name="configCache" eternal="true" maxElementsInMemory="1000" overflowToDisk="true" />
+	<cache name="dictionaryCache" eternal="true" maxElementsInMemory="1000" overflowToDisk="true" />
+    <cache name="shiroCache" eternal="true" maxElementsInMemory="1000"
+       overflowToDisk="true" />
+</ehcache>
+
