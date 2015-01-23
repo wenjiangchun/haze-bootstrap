@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.xinyuan.haze.core.jpa.entity.SimpleBaseEntity;
 import com.xinyuan.haze.system.utils.Sex;
 import com.xinyuan.haze.system.utils.Status;
+import com.xinyuan.haze.system.utils.UserType;
 
 import javax.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,16 +50,24 @@ public class User extends SimpleBaseEntity<String> {
 	 */
 	private String password;
 	
-	@Enumerated(EnumType.STRING)
 	private Sex sex;
 
 	private String email;
 	
+	private String mobile;
+	
+	private String tel;
+	
 	/**
 	 * 用户状态
 	 */
-	@Enumerated(EnumType.STRING)
 	private Status status;
+	
+	/**
+	 * 用户类型
+	 */
+	@Enumerated(EnumType.STRING)
+	private UserType userType;
 	
 	private String salt;
 	
@@ -67,7 +77,7 @@ public class User extends SimpleBaseEntity<String> {
 	private Set<Role> roles = new HashSet<>();
 	
 	private Group group;
-	
+
 	public User() {
 	}
 
@@ -103,6 +113,15 @@ public class User extends SimpleBaseEntity<String> {
 		this.status = status;
 	}
 
+	
+	public UserType getUserType() {
+		return userType;
+	}
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
+	}
+
 	public String getLoginName() {
 		return loginName;
 	}
@@ -127,6 +146,23 @@ public class User extends SimpleBaseEntity<String> {
 		this.salt = salt;
 	}
 	
+	
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
 	@ManyToMany
 	@JoinTable(
 		name="SYS_USER_ROLE"
@@ -205,7 +241,7 @@ public class User extends SimpleBaseEntity<String> {
 		String roleName = "";
 		if (roles != null) {
 			for (Role role : roles) {
-				roleName += role.getName() + ",";
+				roleName += role.getCode() + ",";
 			}
 		}
 		return roleName;
@@ -220,10 +256,70 @@ public class User extends SimpleBaseEntity<String> {
 		return ADMIN.equals(this.getLoginName());
 	}
 
+	/**
+	 * 住宅电话
+	 */
+	private String hourseTel;
+	
+	/**
+	 * 小号
+	 */
+	private String backupTel;
+	
+	
+	public String getHourseTel() {
+		return hourseTel;
+	}
+
+	public void setHourseTel(String hourseTel) {
+		this.hourseTel = hourseTel;
+	}
+
+	public String getBackupTel() {
+		return backupTel;
+	}
+
+	public void setBackupTel(String backupTel) {
+		this.backupTel = backupTel;
+	}
+
+	private Integer sn = 0;
+
+	public Integer getSn() {
+		return sn;
+	}
+
+	public void setSn(Integer sn) {
+		this.sn = sn;
+	}
+
 	@Override
 	public String toString() {
 		String email = this.email != null ? this.email : "";
 		return "User [loginName=" + loginName + ",name=" + name + ",sex=" + sex.getSexName()+",email=" + email + ",status=" + status.getStatusName() + "]";
 	}
 
+	
+	/**
+	 * 用户签名图片路径信息
+	 */
+	private String signaturePath;
+
+	public String getSignaturePath() {
+		return signaturePath;
+	}
+
+	public void setSignaturePath(String signaturePath) {
+		this.signaturePath = signaturePath;
+	}
+
+	public String bakGroupId;
+
+	public String getBakGroupId() {
+		return bakGroupId;
+	}
+
+	public void setBakGroupId(String bakGroupId) {
+		this.bakGroupId = bakGroupId;
+	}
 }

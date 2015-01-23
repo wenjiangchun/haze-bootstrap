@@ -216,7 +216,6 @@
         </div>
                 <div id="file_div"></div>
                 </div>
-    </div>
     <div id="context-menu">
         <ul class="dropdown-menu" role="menu">
             <li><a tabindex="-1" href="#" onclick="renamePath()"><i class="fa fa-files-o"></i> 重命名</a></li>

@@ -1,9 +1,7 @@
 package com.xinyuan.haze.web.utils;
 
 import com.xinyuan.haze.core.spring.utils.SpringContextUtils;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -15,9 +13,9 @@ import java.util.Locale;
  */
 public class WebMessage implements Serializable {
 
-    public static final String ACTION_SUCCESS_MESSAGE = "action_success";
+    public static final String ACTION_SUCCESS_MESSAGE = "SUCCESS";
 
-    public static final String ACTION_ERROR_MESSAGE = "action_failure";
+    public static final String ACTION_ERROR_MESSAGE = "ERROR";
 
 	private static final long serialVersionUID = 1L;
 	
@@ -30,16 +28,18 @@ public class WebMessage implements Serializable {
 	 * 信息类型
 	 */
 	private AlertType alertType;
-	
-	public WebMessage() {
+
+
+    public WebMessage() {
 		
 	}
 	public WebMessage(String content, AlertType alertType) {
 		this.content = content;
 		this.alertType = alertType;
 	}
-	
-	public String getContent() {
+
+
+    public String getContent() {
 		return content;
 	}
 	public void setContent(String content) {
@@ -60,6 +60,7 @@ public class WebMessage implements Serializable {
     public static WebMessage createSuccessWebMessage() {
         return new WebMessage(ACTION_SUCCESS_MESSAGE, AlertType.SUCCESS);
     }
+
 
     /**
      * 创建操作失败信息提示

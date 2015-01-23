@@ -6,39 +6,68 @@
 <html>
 <head>
 	<title>用户授权</title>
+	<%@ include file="/resources/impForm.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			initMenu("viewUser_Menu");
+			var rules = {
+			};
+			var messages = {
+			};
+			initFormValidate("inputForm", rules, messages);
 		});
 	</script>
 </head>
 
 <body>
-	<ul class="breadcrumb">
-        <li><a href="${ctx}"><i class="icon-home"></i><fmt:message key="home"/></a><span class="divider">/</span></li>
-        <li><a href="javascript:void(0)"><fmt:message key="system" /><fmt:message key="manager" /></a><span class="divider">/</span></li>
-        <li><a href="${ctx}/system/user/view"><fmt:message key="user" /><fmt:message key="manager" /></a><span class="divider">/</span></li>
-        <li class="active"><fmt:message key="user" /><fmt:message key="role" /></li>
-    </ul>
-	<form:form id="inputForm" action="${ctx}/system/user/saveRoles" method="post" class="form-horizontal">
-		<input type="hidden" name="id" value="${user.id}"/>
-		<fieldset>
-			<legend><fmt:message key="system" /><fmt:message key="role" /><fmt:message key="list" /></legend>
-			<div class="control-group">
-				<label for="groupList" class="control-label"><fmt:message key="select" /><fmt:message key="role" />:</label>
-				<div class="controls">
-				   <c:forEach items="${user.roles}" var="role" varStatus="idxStatus">
-                        <label class="checkbox"><input type="checkbox" name="roleIds" value="${role.id }" checked="checked"/>${role.name }</label> 
-                    </c:forEach>
-					<c:forEach items="${roleList}" var="role" varStatus="idxStatus">
-						<label class="checkbox"><input type="checkbox" name="roleIds" value="${role.id }"/>${role.name } </label>
-					</c:forEach>
-				</div>
-			</div>	
-			<div class="form-actions">
-				<input id="submit_btn" class="btn btn-primary" type="submit" value="<fmt:message key="submit" />"/>&nbsp;	
-				<input id="cancel_btn" class="btn" type="button" value="<fmt:message key="cancel" />" onclick="history.back()"/>
-			</div>
-		</fieldset>
-	</form:form>
+	<div class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('breadcrumbs', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<ul class="breadcrumb">
+			<li><i class="icon-home home-icon"></i> <a href="#">主页</a></li>
+			<li><a href="#">系统管理</a></li>
+			<li><a href="${ctx}/system/user/view">用户管理</a></li>
+			<li class="active">用户授权</li>
+		</ul>
+		<!-- .breadcrumb -->
+	</div>
+	<div class="page-content">
+    <div class="row">
+			<div class="col-xs-10">
+		       <form:form id="inputForm" modelAttribute="user" action="${ctx}/system/user/saveRoles" method="post" role="form" class="form-horizontal" directUrl="${ctx}/system/user/view?groupId=${groupId}">
+				<fieldset>
+				  <div class="panel panel-info">
+					  <div class="panel-heading"><strong><i class="fa fa-user green"></i> 角色信息</strong></div>
+						  <div class="panel-body">
+							<div class="control-group">
+								<label for="groupList" class="control-label"><fmt:message key="select" /><fmt:message key="role" />:</label>
+								<div class="controls">
+								   <c:forEach items="${user.roles}" var="role" varStatus="idxStatus">
+				                        <label class="checkbox"><input type="checkbox" name="roleIds" value="${role.id }" checked="checked"/>${role.name }</label> 
+				                    </c:forEach>
+									<c:forEach items="${roleList}" var="role" varStatus="idxStatus">
+										<label class="checkbox"><input type="checkbox" name="roleIds" value="${role.id }"/>${role.name } </label>
+									</c:forEach>
+								</div>
+							</div>	
+						</div>
+					</div>
+					<div class="form-group">
+			            <div class="col-sm-offset-2 col-sm-10">
+		                    <button type="reset" class="btn btn-danger"><fmt:message key="reset"/></button>
+		                    <button type="submit" class="btn btn-primary"><span class="fa fa-check"></span> <fmt:message key="submit"/></button>
+						</div>
+					</div>
+					<input type="hidden" name="id" value="${user.id}"/>
+				</fieldset>
+			</form:form>
+	</div>
+	</div>
+	</div>
 </body>
 </html>

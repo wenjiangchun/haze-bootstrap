@@ -41,7 +41,7 @@ public class SupportController {
         map.put("ctx", "${ctx}");
         //获取左边菜单模板所在文件路径
         String filePath = request.getServletContext().getRealPath("WEB-INF/layouts");
-        FreemarkerUtils.generateTemplate(filePath,"left.ftl", filePath + "/left.jsp", map);
+        FreemarkerUtils.generateTemplate(filePath,"left.ftl", filePath + "/left1.jsp", map);
         return true;
 	}
 }

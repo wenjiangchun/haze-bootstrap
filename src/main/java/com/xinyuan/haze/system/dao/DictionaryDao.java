@@ -24,7 +24,7 @@ public interface DictionaryDao extends BaseRepository<Dictionary, String>, Dicti
      * @param code 字典代码
      * @return 字典对象集合
      */
-    @Query("from Dictionary d where d.parent.code=:code and d.isEnabled=true and d.parent.parent = null")
+    @Query("from Dictionary d where d.parent.code=:code and d.isEnabled=true and d.parent.parent = null order by d.sn asc")
     List<Dictionary> findChildsByRootCode(@Param("code") String code);
 
     /**

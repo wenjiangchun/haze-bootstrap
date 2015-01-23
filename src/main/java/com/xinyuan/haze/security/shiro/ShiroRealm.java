@@ -85,7 +85,7 @@ public class ShiroRealm extends AuthorizingRealm {
 			Set<String> perms = new HashSet<String>();
 			for (Role role : user.getRoles()) {
 				if (role.getStatus() == Status.E) {
-					info.addRole(role.getName());
+					info.addRole(role.getCode());
 					perms.addAll(role.getAllPermissons());
 				}
 			}

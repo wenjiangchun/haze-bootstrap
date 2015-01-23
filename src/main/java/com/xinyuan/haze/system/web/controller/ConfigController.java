@@ -68,9 +68,9 @@ public class ConfigController {
 		config.setConfigType(ConfigType.B);
 		try {
 			this.configService.saveOrUpdate(config);
-            return WebMessage.createLocaleSuccessWebMessage(RequestContextUtils.getLocale(request));
+            return WebMessage.createSuccessWebMessage();
 		} catch (Exception e) {
-            return WebMessage.createErrorWebMessage(e.getMessage(), RequestContextUtils.getLocale(request));
+            return WebMessage.createErrorWebMessage(e.getMessage());
 		}
 		
 	}
@@ -102,9 +102,9 @@ public class ConfigController {
 	public WebMessage delete(@PathVariable("ids") String[] ids, HttpServletRequest request) {
 		try {
 			this.configService.deleteConfigs(ids);
-			return WebMessage.createLocaleSuccessWebMessage(RequestContextUtils.getLocale(request));
+			return WebMessage.createSuccessWebMessage();
 		} catch (Exception e) {
-            return WebMessage.createErrorWebMessage(e.getMessage(), RequestContextUtils.getLocale(request));
+            return WebMessage.createErrorWebMessage(e.getMessage());
 		}
 	}
 	

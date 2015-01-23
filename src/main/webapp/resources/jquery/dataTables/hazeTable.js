@@ -8,6 +8,7 @@ function createTable(options) {
 		alert("未定义表格列");
 		return;
 	}
+	var fnCreatedRow = options.fnCreatedRow;
 	var grid =  $('#'+tableId).dataTable({
 		"bProcessing": true,
 	    "bServerSide": true,   
@@ -18,6 +19,7 @@ function createTable(options) {
 		"bAutoWidth":true,
 		"sPaginationType": "full_numbers",
 		"aoColumns":columns,
+		"fnCreatedRow": fnCreatedRow,
 		"oLanguage": {
             "sLengthMenu": "每页显示 _MENU_条记录",  
             "sZeroRecords": "没有检索到数据",  
@@ -60,8 +62,23 @@ function createTable(options) {
                                         if (c.columnRender != null && typeof(eval(p)) == "function") {
                                             newColumn.push(p(index));
                                         } else {
-                                            if (index[name] != undefined) {
-                                                newColumn.push(index[name]);
+                                        	if (name.split(".").length == 2) {
+                                        		var nameArray = name.split(".");
+                                        		if (index[nameArray[0]] != undefined && index[nameArray[0]][nameArray[1]] != undefined) {
+                                        			newColumn.push(index[nameArray[0]][nameArray[1]]);
+                                        		} else {
+                                        			newColumn.push("");
+                                        		}
+                                        	} else if (name.split(".").length == 3) {
+                                        		var nameArray = name.split(".");
+                                        		if (index[nameArray[0]] != undefined && index[nameArray[0]][nameArray[1]] != undefined && index[nameArray[0]][nameArray[1]][nameArray[2]] != undefined) {
+                                        			newColumn.push(index[nameArray[0]][nameArray[1]][nameArray[2]]);
+                                        		} else {
+                                        			newColumn.push("");
+                                        		}
+                                        	}
+                                        	else if (index[name] != undefined) {
+                                        		newColumn.push(index[name]);
                                             } else {
                                                 newColumn.push("");
                                             }
@@ -129,12 +146,17 @@ function getColumns(tableId) {
             bSortable = true;
             type = $(this).attr("sType");
         }
+        var cssClass=null;
+        if ($(this).attr("class") != undefined) {
+            cssClass = $(this).attr("class");
+        }
         var column = {
             "sName" : $(this).attr("sName"),
             "bSortable" : bSortable,
             "data":"id",
             "sType":type,
-            "columnRender" : columnRender
+            "columnRender" : columnRender,
+            "sClass":cssClass
         }
         columns.push(column);
     });

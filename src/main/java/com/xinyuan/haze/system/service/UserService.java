@@ -1,11 +1,14 @@
 package com.xinyuan.haze.system.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.xinyuan.haze.common.utils.EncodeUtils;
+import com.xinyuan.haze.common.utils.HazeStringUtils;
 import com.xinyuan.haze.security.utils.Digests;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
@@ -63,20 +66,21 @@ public class UserService extends AbstractBaseService<User, String> {
 	@Transactional(readOnly=false)
 	public User saveOrUpdate(User user) throws Exception {
 		Assert.notNull(user);
-		User u = this.userDao.findByLoginName(user.getLoginName());
-		if (u != null && user.isNew()) {
-			logger.error("登陆名{}已存在，请重试！",user.getLoginName());
-			throw new UserLoginNameExistException("登陆名" + user.getLoginName() + "已存在，请重试");
-		} else {
-			if (user.isNew()) { //保存用户对象
+		if (user.isNew()) {
+			User u = this.userDao.findByLoginName(user.getLoginName());
+			if (u != null) {
+				logger.error("登陆名{}已存在，请重试！",user.getLoginName());
+				throw new UserLoginNameExistException("登陆名" + user.getLoginName() + "已存在，请重试");
+			} else {
 				user.setPassword(User.DEFAULT_PASSWORD); //设置默认密码。
-                entryptPassword(user); //加密用户密码
+				entryptPassword(user); //加密用户密码
 				logger.debug("保存用户，用户信息为：{}", user.toString());
-			} else { //更新用户对象
+			}
+		} else {
+			//更新用户对象
 				logger.debug("更新用户，用户信息为：{}", user.toString());
 			}
-			user = this.userDao.save(user);
-		}
+		user = this.userDao.save(user);
 		return user;
 	}
 	
@@ -90,13 +94,15 @@ public class UserService extends AbstractBaseService<User, String> {
 	 * 对用户赋角色权限，同时更新权限缓存中用户信息
 	 * @param id 用户Id
 	 * @param role 角色对象
+     * @throws Exception 
 	 */
 	@CacheEvict(value="shiroCache",allEntries=true)
 	@Transactional(readOnly = false)
-	public void addRole(String id, Role role) {
+	public void addRole(String id, Role role) throws Exception {
 		User user = this.userDao.findOne(id);
 		Assert.notNull(user);
 		user.addRole(role);
+		this.saveOrUpdate(user);
 	}
 	
 	/**
@@ -104,12 +110,13 @@ public class UserService extends AbstractBaseService<User, String> {
 	 * @param id 用户Id
 	 * @param roles 角色对象集合
 	 */
-	@Transactional(readOnly = false)
 	@CacheEvict(value="shiroCache",allEntries=true)
+	@Transactional(readOnly = false)
 	public void addRoles(String id, Set<Role> roles) throws Exception {
-		User user = this.userDao.findOne(id);
+		User user = this.findById(id);
 		Assert.notNull(user);
 		user.setRoles(roles);
+		this.saveOrUpdate(user);
 	}
 	
 	/**
@@ -124,6 +131,7 @@ public class UserService extends AbstractBaseService<User, String> {
 		if (user.getGroup() == null || user.getGroup().getId() != group.getId()) {
 			user.setGroup(group);
 		}
+		this.saveOrUpdate(user);
 	}
 	
 	/**
@@ -155,9 +163,10 @@ public class UserService extends AbstractBaseService<User, String> {
 	 * 禁用用户
 	 * @param id 用户ID
 	 * @return 禁用状态的用户对象
+	 * @throws Exception 
 	 */
 	@Transactional(readOnly = false)
-	public User disableUser(String id) {
+	public User disableUser(String id) throws Exception {
 		return changeStatus(id, Status.D);
 	}
 	
@@ -165,9 +174,10 @@ public class UserService extends AbstractBaseService<User, String> {
 	 * 启用用户
 	 * @param id 用户ID
 	 * @return 启用状态的用户对象
+	 * @throws Exception 
 	 */
 	@Transactional(readOnly = false)
-	public User enableUser(String id) {
+	public User enableUser(String id) throws Exception {
 		return changeStatus(id, Status.E);
 	}
 
@@ -176,12 +186,14 @@ public class UserService extends AbstractBaseService<User, String> {
 	 * @param id 用户ID
 	 * @param status 状态对象
 	 * @return 更改状态后的用户对象
+	 * @throws Exception 
 	 */
 	@Transactional(readOnly = false)
-	public User changeStatus(String id, Status status) {
+	public User changeStatus(String id, Status status) throws Exception {
 		Assert.notNull(id);
 		User user = this.findById(id);
 		user.setStatus(status);
+		this.saveOrUpdate(user);
 		return user;
 	}
 	/**
@@ -220,5 +232,18 @@ public class UserService extends AbstractBaseService<User, String> {
 
         byte[] hashPassword = Digests.sha1(user.getPassword().getBytes(), salt, HASH_INTERATIONS);
         user.setPassword(EncodeUtils.encodeHex(hashPassword));
+    }
+
+    public List<User> findByText(String text) {
+        if (HazeStringUtils.isBlank(text)) {
+            Map<String, Object> map  = new HashMap<String, Object>();
+            map.put("status", Status.E);
+			map.put("group.name_asc", null);
+			map.put("sn_asc", null);
+			map.put("loginName_notEqual", User.ADMIN);
+            return this.findAll(map);
+        } else {
+            return this.userDao.findByUserNameOrGroupName("%" + text + "%", Status.E);
+        }
     }
 }

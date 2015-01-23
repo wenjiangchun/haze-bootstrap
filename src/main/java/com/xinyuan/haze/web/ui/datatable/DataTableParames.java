@@ -126,7 +126,6 @@ public class DataTableParames {
 
 	/**
 	 * 根据参数对象获取查询分页对象
-	 * @param dataTableParames
 	 * @return PageRequest
 	 */
 	public PageRequest getPageRequest() {

@@ -1,16 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/resources/impTaglib.jsp"%>
+<%@ include file="/resources/impTagLib.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>上传文件</title>
-    <%@ include file="/resources/impJqueryEasyUI.jsp"%>
+	<link rel="stylesheet" type="text/css" href="${ctx}/resources/jquery/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" />
+<script type="text/javascript" src="${ctx}/resources/jquery/plupload/js/plupload.full.min.js"></script>
+<script type="text/javascript" src="${ctx}/resources/jquery/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script type="text/javascript" src="${ctx}/resources/jquery/plupload/js/i18n/zh_CN.js"></script>
 </head>
 <body>
-<link rel="stylesheet" type="text/css" href="${ctx}/resources/jquery/jquery-plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" />
-<script type="text/javascript" src="${ctx}/resources/jquery/jquery-plupload/js/plupload.full.min.js"></script>
-<script type="text/javascript" src="${ctx}/resources/jquery/jquery-plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-<script type="text/javascript" src="${ctx}/resources/jquery/jquery-plupload/js/i18n/zh_CN.js"></script>
 <div>
     <form:form id="inputForm" modelAttribute="fileEntity" method="post" enctype="multipart/form-data">
         <div id="uploader">
@@ -32,7 +31,7 @@
                 crop: true // crop to exact dimensions
             },
             filters : [
-                {title : "Image files", extensions : "jpg,gif,png"},
+                {title : "Image files", extensions : "jpg,gif,png,doc"},
                 {title : "Zip files", extensions : "zip,avi"},
                 {title : "pdf files", extensions : "pdf,mkv"}
             ],
@@ -47,11 +46,21 @@
             flash_swf_url : '${ctx}/resources/jquery/jquery-plupload/js/Moxie.swf',
             silverlight_xap_url : '${ctx}/resources/jquery/jquery-plupload/js/Moxie.xap',
             init : {
-                UploadComplete : function(up, file) {
-                    $(file).each(function(index,data) {
-                    alert(data.name);
-                 });
-                }
+            	FileUploaded : function(up, file,info) {
+					plupload.each(info,function(arg) {
+						alert(info);
+										var row = "";
+										plupload.each(arg,function(value,key) {
+															if (typeof (value) != "function") {
+																row += value;
+															}
+															// 
+														});
+										file.id = row;
+										// top.
+									});
+					submit();
+				}
             }
         });
 
@@ -96,9 +105,8 @@
     function submit() {
         alert(777);
         var uploader = $('#uploader').pluploadQueue();
-        alert(uploader);
         if (uploader.total.uploaded == uploader.files.length) {
-            alert(uploader.files);
+            alert(uploader.files.id);
         }
     }
 

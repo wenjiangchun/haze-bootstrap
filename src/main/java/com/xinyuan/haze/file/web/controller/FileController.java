@@ -3,6 +3,7 @@ package com.xinyuan.haze.file.web.controller;
 import com.xinyuan.haze.file.utils.FileEntity;
 import com.xinyuan.haze.file.utils.FileManager;
 import com.xinyuan.haze.web.utils.WebMessage;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,16 +120,22 @@ public class FileController {
                 Path p = FileManager.toZIP(path);
                 headers.setContentDispositionFormData("attachment", p.getFileName().toString());
                 return new ResponseEntity<byte[]>(Files.readAllBytes(p),
-                        headers, HttpStatus.CREATED);
+                        headers, HttpStatus.OK);
             } else { //如果是文件则直接下载
-                headers.setContentDispositionFormData("attachment", Paths.get(path).getFileName().toString());
+                headers.setContentDispositionFormData("attachment", fileName);
                 return new ResponseEntity<byte[]>(Files.readAllBytes(Paths.get(path)),
-                        headers, HttpStatus.CREATED);
+                        headers, HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            List<Charset> acceptableCharsets = new ArrayList<>();
+            acceptableCharsets.add(Charset.forName("iso-8859-1"));
+			headers.setAcceptCharset(acceptableCharsets );
+            return new ResponseEntity<byte[]>("download error!".getBytes(),
+                    headers, HttpStatus.OK);
         }
-        return null;
     }
 
     @RequestMapping(value = "/renamePath")

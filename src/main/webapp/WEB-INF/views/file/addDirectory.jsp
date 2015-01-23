@@ -4,7 +4,6 @@
 <html>
 <head>
 	<title>创建文件夹</title>
-    <%@ include file="/resources/impJqueryEasyUI.jsp"%>
 </head>
 <body>
 <div style="padding: 10px">

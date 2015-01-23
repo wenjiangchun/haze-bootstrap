@@ -22,7 +22,7 @@ public class DictionaryDaoImpl implements DictionaryRepository {
     @SuppressWarnings("unchecked")
 	@Override
     public List<Dictionary> findByRootCodeAndCode(String rootCode, String code) {
-        String nativeSql = "SELECT T.* FROM SEC_DICTIONARY T WHERE T.CODE= ?1 START WITH ID=(SELECT ID FROM SEC_DICTIONARY WHERE CODE= ?2) CONNECT BY PRIOR ID = PARENT_ID";
+        String nativeSql = "SELECT T.* FROM SEC_DICTIONARY T WHERE T.CODE= ?1 START WITH ID=(SELECT ID FROM SEC_DICTIONARY WHERE CODE= ?2) CONNECT BY PRIOR ID = PARENT_ID ORDER BY T.SN ASC";
         Query query = em.createNativeQuery(nativeSql,Dictionary.class);
         query.setParameter(1, code);
         query.setParameter(2, rootCode);

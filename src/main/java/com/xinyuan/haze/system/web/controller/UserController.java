@@ -1,4 +1,23 @@
 package com.xinyuan.haze.system.web.controller;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.xinyuan.haze.system.entity.Group;
 import com.xinyuan.haze.system.entity.Role;
 import com.xinyuan.haze.system.entity.User;
@@ -7,26 +26,10 @@ import com.xinyuan.haze.system.service.RoleService;
 import com.xinyuan.haze.system.service.UserService;
 import com.xinyuan.haze.system.utils.Sex;
 import com.xinyuan.haze.system.utils.Status;
-import com.xinyuan.haze.web.ui.bootstrap.BootStrapComponentUtils;
-import com.xinyuan.haze.web.ui.bootstrap.css.SpanType;
+import com.xinyuan.haze.system.utils.UserType;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
 import com.xinyuan.haze.web.ui.datatable.DataTableParames;
-
 import com.xinyuan.haze.web.utils.WebMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.ServletRequest;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * 用户操作Controller
@@ -49,6 +52,9 @@ public class UserController {
 	@RequestMapping(value = "view")
 	public String list(Model model, ServletRequest request) {
 		model.addAttribute("statuss", Status.values());
+		model.addAttribute("userTypes", UserType.values());
+		String selectGroupId = request.getParameter("groupId");
+		model.addAttribute("groupId", selectGroupId);
 		return "system/user/userList";
 	}
 	
@@ -68,6 +74,17 @@ public class UserController {
             //将传递进来的status字符串转化为Status枚举对象
 			queryVairables.put("status", Status.valueOf(value));
 		}
+		if (queryVairables != null && queryVairables.get("userType") != null) {
+			String value = (String) queryVairables.get("userType");
+            //将传递进来的status字符串转化为Status枚举对象
+			queryVairables.put("userType", UserType.valueOf(value));
+		}
+		if (queryVairables.get("group.id") != null) {
+			String groupId = (String) queryVairables.get("group.id");
+			queryVairables.remove("group.id");
+			queryVairables.put("bakGroupId_or_group.id",groupId);
+		}
+
 		Page<User> userList = this.userService.findPage(p, queryVairables, false); //过滤掉"admin"对象
 		DataTablePage dtp = DataTablePage.generateDataTablePage(userList, dataTableParames); //将查询结果封装成前台使用的DataTablePage对象
 		return dtp;
@@ -86,6 +103,7 @@ public class UserController {
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("sexs", Sex.values());
 		model.addAttribute("statuss", Status.values());
+		model.addAttribute("userTypes", UserType.values());
 		model.addAttribute("groupList",groupList);
 		return "system/user/addUser";
 	}
@@ -111,7 +129,10 @@ public class UserController {
 				user.setRoles(roles);
 			}
 		}
-		user.setGroup(null);
+		
+		if(user.getGroup() != null && StringUtils.isBlank(user.getGroup().getId())){
+			user.setGroup(null);
+		}
         try {
             this.userService.saveOrUpdate(user);
             return WebMessage.createSuccessWebMessage();
@@ -129,7 +150,6 @@ public class UserController {
         } catch (Exception e) {
             return WebMessage.createErrorWebMessage(e.getMessage());
         }
-
     }
 	
 	/**
@@ -142,6 +162,10 @@ public class UserController {
 	public String addRoles(@PathVariable("id")String id, Model model) {
 		User user = this.userService.findById(id);
 		List<Role> roleList = this.roleService.findByStatus(Status.E);
+		Group group = user.getGroup();
+		if(group != null){
+			model.addAttribute("groupId", group.getId());
+		}
 		model.addAttribute("user", user);
 		roleList.removeAll(user.getRoles());
 		model.addAttribute("roleList",roleList);
@@ -179,24 +203,18 @@ public class UserController {
 	 * @author 王先先  修改  2013-11-28   先判断用户输入的旧密码是否正确，正确的情况下才可修改密码
 	 * @param id    用户id
 	 * @param newPassword  新密码
-	 * @param oldPassword  旧密码
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "updatePassword", method = RequestMethod.POST)	 
 	@ResponseBody
-	public String updatePassword(@RequestParam(value = "id") String id,@RequestParam(value = "newPassword") String newPassword,@RequestParam(value = "oldPassword") String oldPassword,ServletRequest request) {
-		User user = this.userService.findById(id);
-		/*byte[] salt = EncodeUtils.decodeHex(user.getSalt());
-		byte[] hashPassword = Digests.sha1(oldPassword.getBytes(), salt, UserService.HASH_INTERATIONS);
-		String newp = EncodeUtils.encodeHex(hashPassword);
-		if (user.getPassword().equals(newp)) {
+	public String updatePassword(@RequestParam(value = "id") String id,@RequestParam(value = "newPassword") String newPassword,ServletRequest request) {
+		try {
 			this.userService.updatePassword(id, newPassword);
-			return "success";
-		} else {
-			return "false";
-		}*/
-		return null;
+			return WebMessage.ACTION_SUCCESS_MESSAGE;
+		} catch (Exception e) {
+			return e.getMessage();
+		}
 	}
 	
 	@RequestMapping(value = "resetPassword/{id}")
@@ -220,6 +238,7 @@ public class UserController {
 	public String edit(@PathVariable String id, Model model, ServletRequest request) {
 		model.addAttribute("sexs", Sex.values());
 		model.addAttribute("statuss", Status.values());
+		model.addAttribute("userTypes", UserType.values());
 		User user = this.userService.findById(id);
 		List<Group> groupList = this.groupService.findAll();
 		model.addAttribute("user", user);
@@ -234,13 +253,22 @@ public class UserController {
 	 * @return 返回用户列表页面
 	 */
 	@RequestMapping(value = "update", method = RequestMethod.POST)
+	@ResponseBody
 	public WebMessage update(User user, ServletRequest request) {
 		User u = this.userService.findById(user.getId());
 		u.setName(user.getName());
 		u.setEmail(user.getEmail());
 		u.setSex(user.getSex());
 		u.setStatus(user.getStatus());
-		u.setGroup(user.getGroup());
+		u.setUserType(user.getUserType());
+		u.setSn(user.getSn());
+		u.setSignaturePath(user.getSignaturePath());
+		u.setBakGroupId(user.getBakGroupId());
+		if (user.getGroup() == null || StringUtils.isEmpty(user.getGroup().getId())) {
+			u.setGroup(null);
+		} else {
+			u.setGroup(user.getGroup());
+		}
 		/*u.setMobile(user.getMobile());
 		u.setTel(user.getTel());*/
         try {

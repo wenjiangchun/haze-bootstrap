@@ -14,7 +14,8 @@ import java.util.Set;
  * @author sofar
  */
 @Entity
-@Table(name = "SYS_GROUP", uniqueConstraints = {@UniqueConstraint(columnNames = {"PARENT_ID", "CODE"})})
+//@Table(name = "SYS_GROUP", uniqueConstraints = {@UniqueConstraint(columnNames = {"PARENT_ID", "CODE"})})
+@Table(name = "SYS_GROUP")
 @JsonIgnoreProperties(value = {"childs", "roles", "users"})
 public class Group extends SimpleBaseEntity<String> {
 
@@ -51,6 +52,8 @@ public class Group extends SimpleBaseEntity<String> {
      * 机构下用户
      */
     private Set<User> users = new HashSet<>();
+
+
 
     /**
      * 机构角色组
@@ -157,6 +160,8 @@ public class Group extends SimpleBaseEntity<String> {
         this.code = code;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "type_id")
     public Dictionary getGroupType() {
         return groupType;
     }
@@ -220,6 +225,14 @@ public class Group extends SimpleBaseEntity<String> {
         return this.roles;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     private String pid;
 
     @Transient
@@ -229,6 +242,16 @@ public class Group extends SimpleBaseEntity<String> {
 
     public void setPid(String pid) {
         this.pid = pid;
+    }
+
+    private Integer sn = 0;
+
+    public Integer getSn() {
+        return sn;
+    }
+
+    public void setSn(Integer sn) {
+        this.sn = sn;
     }
 
     @Override

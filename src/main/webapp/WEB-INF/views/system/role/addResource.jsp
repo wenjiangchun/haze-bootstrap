@@ -7,9 +7,10 @@
 <head>
 	<title><fmt:message key="add"/><fmt:message key="resource"/></title>
 	<link href="${ctx}/resources/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css" rel="stylesheet" />
-	<script type="text/javascript" src="${ctx}/resources/zTree/js/jquery.ztree.js"></script>
+	<script type="text/javascript" src="${ctx}/resources/zTree/js/jquery.ztree.all-3.5.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			initMenu("viewRole_Menu");
 			initResourceTree();
 			$("#submit_btn").click(function() {
 				var roleId = $("#roleId").val();
@@ -21,7 +22,22 @@
                 $.each(checkNodes,function(i,n) {
                 	ids.push(n.id);
                 });
-				window.location.href="${ctx}/system/role/saveResources/"+roleId+"/"+ids;
+				//window.location.href="${ctx}/system/role/saveResources/"+roleId+"/"+ids;
+				
+				if(ids == ""){
+					alert("请至少选择一个资源!");
+					return false;
+				}
+				
+				$.get("${ctx}/system/role/saveResources/"+roleId+"/"+ids,function(data){
+					if(data.alertType == "SUCCESS"){
+						alert("角色资源分配成功");
+						backRoleList();
+					}else{
+						alert(data.content);
+					}
+					
+				},"json");
 			});
 		});
 		
@@ -36,7 +52,7 @@
 							  simpleData:{
 								  enable:true,
 								  idKey:"id",
-								  pIdKey:"pid",
+								  pIdKey:"parentId",
 								  rootPId:null
 							  }
 						  }, 
@@ -65,29 +81,57 @@
 			}
 		function onClick() {
 		}
+		
+		function backRoleList(){
+			window.location.href = "${ctx}/system/role/view";
+		}
 	</script>
 </head>
 
 <body>
-	<div class="content">
-	 <div class="leftTree box" style="width:400px;margin-left:100px">
-	     <div data-original-title="" class="box-header">
-			<h2>
-				 <i class=""></i><span class="break"></span>系统资源树</a>
-			</h2>
-			<div class="box-icon">
+	
+	<div class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('breadcrumbs', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<ul class="breadcrumb">
+			<li><i class="icon-home home-icon"></i> <a href="#">主页</a></li>
+			<li><a href="#">系统管理</a></li>
+			<li><a href="#">角色管理</a></li>
+			<li class="active">资源分配</li>
+		</ul>
+		<!-- .breadcrumb -->
+	</div>
+	<div class="page-content">
+	    <div class="row">
+				<div class="col-xs-10">
+					<form:form id="inputForm" modelAttribute="config" action="${ctx}/system/config/save" method="post" role="form" class="form-horizontal">
+						<fieldset>
+							<div class="panel panel-info">
+							  <div class="panel-heading"><strong><i class="fa fa-cog green"></i> 系统资源信息</strong></div>
+								<div class="panel-body">
+									<ul id="resourceTree" class="ztree"></ul>
+									<input type="hidden" name="roleId" id="roleId" value="${role.id }"/>
+									<c:forEach items="${role.resources}" var="resource">
+									   <input type="hidden" name="resource" value="${resource.id}"/>
+									</c:forEach>
+								</div>
+							</div>
+				            <div class="form-group">
+				                <div class="col-sm-offset-2 col-sm-10">
+									 <input id="cancel_btn" class="btn" type="button" value="返回" onclick="backRoleList();"/>&nbsp;	
+									   <input id="submit_btn" class="btn btn-primary" type="button" value="提交"/>
+				                </div>
+				            </div>
+						</fieldset>
+					</form:form>
 			</div>
 		</div>
-		 <ul id="resourceTree" class="ztree"></ul>
-		 <div class="form-actions"><br>
-		 <input id="submit_btn" class="btn btn-primary" type="button" value="提交"/>&nbsp;	
-		 <input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
 	</div>
-	</div>
-	</div>
-	<input type="hidden" name="roleId" id="roleId" value="${role.id }"/>
-	<c:forEach items="${role.resources}" var="resource">
-	   <input type="hidden" name="resource" value="${resource.id}"/>
-	</c:forEach>
+	
 </body>
 </html>

@@ -12,7 +12,6 @@ import org.springframework.util.Assert;
 
 import com.xinyuan.haze.common.utils.HazeStringUtils;
 import com.xinyuan.haze.core.jpa.service.AbstractBaseService;
-import com.xinyuan.haze.core.jpa.service.HazeServiceException;
 import com.xinyuan.haze.system.dao.ResourceDao;
 import com.xinyuan.haze.system.entity.Resource;
 import com.xinyuan.haze.system.entity.Role;

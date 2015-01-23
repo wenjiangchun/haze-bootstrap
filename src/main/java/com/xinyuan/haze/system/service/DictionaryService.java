@@ -1,7 +1,6 @@
 package com.xinyuan.haze.system.service;
 
 import com.xinyuan.haze.core.jpa.service.AbstractBaseService;
-import com.xinyuan.haze.core.jpa.service.HazeServiceException;
 import com.xinyuan.haze.system.dao.DictionaryDao;
 import com.xinyuan.haze.system.entity.Dictionary;
 

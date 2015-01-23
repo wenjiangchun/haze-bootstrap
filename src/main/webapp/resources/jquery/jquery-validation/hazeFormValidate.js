@@ -57,7 +57,19 @@ function defaultSubmitHandler(form) {
     $(form).ajaxSubmit({
         dataType : 'json',
         success : function(data) {
-            top.hideMyModal(data);
+            //top.hideMyModal(data);
+        	if (data.alertType == "SUCCESS") {
+        		alert("操作成功");
+        		var directionUrl = $(form).attr("directUrl");
+        		if(directionUrl != null && directionUrl != ""){//如果有跳转地址则转向跳转地址，否则刷新当前页面
+        			window.location.href = directionUrl;
+        		}else{
+        			window.location.reload();
+        		}
+        		
+        	} else {
+        		alert("操作失败【"+data.content+"】");
+        	}
         }
     });
     //return false;

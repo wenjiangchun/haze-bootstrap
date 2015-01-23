@@ -30,9 +30,7 @@ public class FileUploadController {
 			HttpServletResponse response) {
        int n = request.getFiles("file").size();
        //throw new UnsupportedOperationException("n=" + n);
-        System.out.println("共上传" + n + "个文件");
         request.getFiles("file").forEach(f -> {
-            System.out.println(f.getOriginalFilename());
         });
         try {
             request.getFiles("file").get(0).transferTo(new File("/home/sofar/" + request.getFiles("file").get(0).getOriginalFilename()));

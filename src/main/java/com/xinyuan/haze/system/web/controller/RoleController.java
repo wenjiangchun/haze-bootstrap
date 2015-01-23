@@ -24,8 +24,6 @@ import com.xinyuan.haze.system.exception.RoleExistException;
 import com.xinyuan.haze.system.service.ResourceService;
 import com.xinyuan.haze.system.service.RoleService;
 import com.xinyuan.haze.system.utils.Status;
-import com.xinyuan.haze.web.ui.bootstrap.BootStrapComponentUtils;
-import com.xinyuan.haze.web.ui.bootstrap.css.SpanType;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
 import com.xinyuan.haze.web.ui.datatable.DataTableParames;
 import com.xinyuan.haze.web.utils.WebMessage;
@@ -77,9 +75,9 @@ public class RoleController {
 	public WebMessage save(Role role, HttpServletRequest request) {
 		try {
 			this.roleService.saveOrUpdate(role);
-            return WebMessage.createLocaleSuccessWebMessage(RequestContextUtils.getLocale(request));
+            return WebMessage.createSuccessWebMessage();
 		} catch (Exception e) {
-			return WebMessage.createErrorWebMessage(e.getMessage(), RequestContextUtils.getLocale(request));
+			return WebMessage.createErrorWebMessage(e.getMessage());
 		}
 	}
 	
@@ -88,9 +86,9 @@ public class RoleController {
 	public WebMessage delete(@PathVariable("ids") String[] ids, HttpServletRequest request) {
         try {
             this.roleService.batchDelete(ids);
-            return WebMessage.createLocaleSuccessWebMessage(RequestContextUtils.getLocale(request));
+            return WebMessage.createSuccessWebMessage();
         } catch (Exception e) {
-            return WebMessage.createErrorWebMessage(e.getMessage(), RequestContextUtils.getLocale(request));
+            return WebMessage.createErrorWebMessage(e.getMessage());
         }
 	}
 	
@@ -127,9 +125,9 @@ public class RoleController {
 	public WebMessage saveResources(@PathVariable("roleId") String id,@PathVariable("resourceIds") String[] resourceIds, HttpServletRequest request) {
         try {
             this.roleService.addResources(id, resourceIds);
-            return WebMessage.createLocaleSuccessWebMessage(RequestContextUtils.getLocale(request));
+            return WebMessage.createSuccessWebMessage();
         } catch (Exception e) {
-            return WebMessage.createErrorWebMessage(e.getMessage(), RequestContextUtils.getLocale(request));
+            return WebMessage.createErrorWebMessage(e.getMessage());
         }
     }
 	

@@ -5,9 +5,10 @@
 <html>
 <head>
 	<title><fmt:message key="role"/><fmt:message key="manager"/></title>
-	<%@ include file="/resources/impDatatable.jsp"%> 
+	<%@ include file="/resources/impDatatable.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			initMenu("viewRole_Menu");
 			initDataTable();
 			//清空按钮
 			$("#clearBtn").click(function(){
@@ -23,7 +24,8 @@
 				window.location.href="${ctx}/system/role/delete/" + ids ;
 			});
 			$("#add_btn").click(function() {
-                showMyModal("${ctx}/system/role/add","添加角色", callBackAction);
+                //showMyModal("${ctx}/system/role/add","添加角色", callBackAction);
+                window.location.href = "${ctx}/system/role/add";
 			});
 		});
 		
@@ -42,14 +44,21 @@
         }
         function callBackAction(data) {
             if (data != undefined) {
-                alert(data.content);
+            	if(data.alertType == "SUCCESS"){
+                	alert("操作成功!");
+                }else{
+                	alert(data.content);
+                }
                 refreshTable();
             }
         }
 
         function editRole(id) {
             if (id != null) {
-                showMyModal("${ctx}/system/role/edit/" + id, "<fmt:message key="edit"/><fmt:message key="role"/>", callBackAction);
+               // showMyModal("${ctx}/system/role/edit/" + id, "<fmt:message key="edit"/><fmt:message key="role"/>", callBackAction);
+                window.location.href = "${ctx}/system/role/edit/" + id;
+            }else{
+            	alert("待编辑的数据id不能为空");
             }
         }
 
@@ -70,9 +79,12 @@
             }
         }
 
-        function addResources(id) {
+        function addResource(id) {
             if (id != null) {
-                showMyModal("${ctx}/system/role/addResources/" + id, "<fmt:message key="add"/><fmt:message key="resource"/>", callBackAction);
+                //showMyModal("${ctx}/system/role/addResources/" + id, "<fmt:message key="add"/><fmt:message key="resource"/>", callBackAction);
+            	 window.location.href = "${ctx}/system/role/addResources/" + id;
+            }else{
+            	alert("角色id不能为空");
             }
         }
 
@@ -94,48 +106,70 @@
 </head>
 
 <body>
-    <ol class="breadcrumb">
-        <li><a href="#">主页</a></li>
-        <li><a href="#">系统管理</a></li>
-        <li class="active">角色管理</li>
-    </ol>
-    <div class="panel panel-primary">
-		<div class="panel-heading">
-			<h3 class="panel-title"><i class="fa fa-tag"></i> 角色列表</h3>
-		</div>
-		<div class="panel-body">
-			<form class="form-inline" role="form">
-				<div class="form-group">
-					<label class="" for="name">角色名：</label> 
-					<input type="text" id="name" name="name_like" class="databatle_query form-control">
+	<div class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('breadcrumbs', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<ul class="breadcrumb">
+			<li><i class="icon-home home-icon"></i> <a href="#">主页</a></li>
+			<li><a href="#">系统管理</a></li>
+			<li class="active">角色管理</li>
+		</ul>
+		<!-- .breadcrumb -->
+	</div>
+
+	<div class="page-content">
+		<div class="hr hr-18 hr-dotted"></div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-inline" role="form">
+						<label class="" for="name">角色名：</label> 
+						<input type="text" id="name" name="name_like" class="databatle_query input-middle">
+						
+						<label class="" for="status" style="margin-left:5px;">状态：</label> 
+						<select id="status" name="status" class="databatle_query input-large">
+							<option value=""></option>
+							<c:forEach items="${statuss}" var="status">
+								<option value="${status}">${status.statusName}</option>
+							</c:forEach>
+						</select>
+						
+					<button type="button" class="btn btn-sm btn-danger" onclick="">清空</button>
+					<button type="button" class="btn btn-sm btn-primary" onclick="refreshTable();" style="margin-left:5px;">
+						<i class="fa fa-search"></i> 查询
+					</button>
+				</form>
+				<div class="hr hr-18 hr-dotted"></div>
+				<div class="table-header">
+					<i class="fa fa-user"></i> 角色列表
 				</div>
-				<div class="form-group">
-					<label class="" for="status">状态：</label> 
-					<select id="status" name="status" class="databatle_query form-control">
-						<option value=""></option>
-						<c:forEach items="${statuss}" var="status">
-							<option value="${status}">${status.statusName}</option>
-						</c:forEach>
-					</select>
+				<div class="table-responsive">
+					<table id="contentTable"
+						class="table table-striped table-bordered table-condensed table-hover">
+						<thead>
+							<tr>
+								<tr>
+		                            <th sName="id"><fmt:message key="num"/></th>
+		                            <th sName="name"><fmt:message key="role.name"/></th>
+		                            <th sName="code" bSortable="true"><fmt:message key="role.roleName"/></th>
+		                            <th sName="status" columnRender="formatStatus"><fmt:message key="status"/></th>
+		                            <th sName="operate" columnRender="formatOperator"><fmt:message key="operate"/></th>
+		                        </tr>
+							</tr>
+						</thead>
+					</table>
+					<div class="hr hr-18 hr-dotted"></div>
+					<button type="button" class="btn btn-danger" id="add_btn">
+						<i class="fa fa-plus-circle"></i> <fmt:message key="add"/><fmt:message key="role"/>
+					</button>
+					
 				</div>
-				<button type="button" class="btn btn-primary" onclick="refreshTable();"><i class="fa fa-search"></i> 查询</button>
-				<button type="button" class="btn btn-default" onclick="">清空</button>
-			</form>
-			<br>
-			<table id="contentTable" class="table table-striped table-bordered table-condensed table-hover">
-                    <thead>
-                        <tr>
-                            <th sName="id"><fmt:message key="num"/></th>
-                            <th sName="name"><fmt:message key="role.name"/></th>
-                            <th sName="code" bSortable="true"><fmt:message key="role.roleName"/></th>
-                            <th sName="status" columnRender="formatStatus"><fmt:message key="status"/></th>
-                            <th sName="operate" columnRender="formatOperator"><fmt:message key="operate"/></th>
-                        </tr>
-                    </thead>
-                </table>
+			</div>
 		</div>
 	</div>
-	<button type="button" class="btn btn-danger" id="add_btn"><i class="fa fa-plus-circle"></i> <fmt:message key="add"/><fmt:message key="role"/></button>
-	<button type="button" class="btn btn-danger hide" id="delete_btn"><span class="glyphicon glyphicon-minus-sign"></span> <fmt:message key="delete"/><fmt:message key="role"/></button>
 </body>
 </html>

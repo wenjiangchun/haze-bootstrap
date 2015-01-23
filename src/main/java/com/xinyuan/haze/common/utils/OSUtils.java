@@ -1,15 +1,15 @@
 package com.xinyuan.haze.common.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
-
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.BiFunction;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 /**
  * 操作系统工具类
@@ -23,6 +23,10 @@ public final class OSUtils {
      */
     public static final String FILE_SEPARATOR = FileSystems.getDefault().getSeparator();
 
+	/**
+	 * 获取系统当前用户目录
+	 */
+	public static final String DEFAULT_USE_DIR = System.getProperty("user.dir") + FILE_SEPARATOR + "OA";
     /**
      * 封装了操作系统信息的{@code map}对象
      * <p>

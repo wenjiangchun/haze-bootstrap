@@ -10,6 +10,7 @@
 	<script type="text/javascript">
 	    var dataTable ;
 		$(document).ready(function() {
+			initMenu("viewGroup_Menu");
 			initGroupTree(); //初始化机构树
 			initDataTable(); //初始化用户分页列表
 			$("#clearBtn").click(function(){ //清空按钮
@@ -22,7 +23,15 @@
 						ids.push($(this).val());
 					}
 				});
-				window.location.href="${ctx}/system/user/delete/" + ids ;
+				//window.location.href="${ctx}/system/user/delete/" + ids ;
+				$.get(this.groupService.batchDelete(ids),function(data){
+					 if(data.alertType == "SUCCESS"){
+		            	alert("操作成功!");
+		             }else{
+		            	alert(data.content);
+		             }
+					 window.location.reload();
+				});
 			});
 			$("#add_btn").click(function() { //添加组织机构按钮事件
 				var parentId = $("#parent_ID").val();
@@ -30,7 +39,8 @@
 			    if (parentId != null && parentId != "") {
 			    	url += "?parentId="+parentId;
 			    }
-				window.location.href=url;
+			    //showMyModal(url,"添加机构",callBackAction);
+			    window.location.href=url;
 			});
 		});
 		
@@ -89,63 +99,72 @@
 		 */
 		function initDataTable(groupId) {
 			var options = {
-                    divId:"contentTable",
-                    url : "${ctx}/system/group/search",
-                    columns:[
-                    	 {
-                    		 "sName": "id",
-                             "bSortable": false,
-                             "bSearchable":false,
-                             "sWidth":40
-                         },
-                         {
-                             "sName": "name",
-                             "bSortable": false,
-                             "sWidth":80
-                         },
-                         {
-                             "sName": "name",
-                             "bSortable": false,
-                             "sWidth":80
-                         },
-                         {
-                             "sName": "name",
-                             "bSortable": false,
-                             "sWidth":80
-                         },
-                         {
-                             "sName": "name",
-                             "bSortable": false,
-                             "sWidth":80
-                         },
-                         {
-                             "sName": "name",
-                             "bSortable": false,
-                             "sWidth":80
-                         },
-                         {
-                             "sName": "operator",
-                             "bSearchable":false,
-                             "bSortable": false,
-                             "sWidth":120
-                         }
-                   ]
-            };
+					divId : "contentTable",
+					url : "${ctx}/system/group/search"
+				};
 			dataTable = createTable(options);
 		}
-		 function tbreresh() {
-				dataTable.fnClearTable();
-			}
+		function callBackAction(data) {
+	        if (data != undefined) {
+	            alert(data.content);
+	            refreshTable();
+	        }
+	    }
+		
+	 function editGroup(id){
+		 window.location.href="${ctx}/system/group/edit/"+id;
+	 }
+		
+	 function deleteGroup(id){
+		 $.get("${ctx}/system/group/delete/"+id, function(data){
+			if(data.alertType == "SUCCESS"){
+            	alert("操作成功!");
+            }else{
+            	alert(data.content);
+            }
+            refreshTable();
+            removeTreeNodeByNodeId(id);
+		 });
+	 }
+	 
+	function removeTreeNodeByNodeId(id){
+		var treeObj = $.fn.zTree.getZTreeObj("groupTree");
+	    if (id != null && id != "") {
+		  var node = treeObj.getNodeByParam("id", id);
+		  if(node != null){
+			  treeObj.removeNode(node);
+		  }
+	    }
+	}
+		
+	  function formatOperator(data) {
+	        var html = "";
+	        html += "<a href='javascript:void(0)' onclick='editGroup(\"" + data.id + "\")' title='<fmt:message key="edit"/>'> <i class='fa fa-edit fa-lg'></i> </a>|";
+	        html += "<a href='javascript:void(0)' onclick='deleteGroup(\"" + data.id + "\")' title='<fmt:message key="delete"/>'> <i class='fa fa-trash-o fa-lg'></i> </a>";
+	        return html;
+	    }
 	</script>
 </head>
 
 <body>
-<ol class="breadcrumb">
-    <li><a href="#">主页</a></li>
-    <li><a href="#">系统管理</a></li>
-    <li class="active">机构管理</li>
-</ol>
- <div class="row">
+<div class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('breadcrumbs', 'fixed')
+			} catch (e) {
+			}
+		</script>
+		<ul class="breadcrumb">
+			<li><i class="icon-home home-icon"></i> <a href="#">主页</a></li>
+			<li><a href="#">系统管理</a></li>
+			<li class="active">机构管理</li>
+		</ul>
+		<!-- .breadcrumb -->
+	</div>
+	<div class="page-content">
+		<div class="hr hr-18 hr-dotted"></div>
+		<div class="row">
+			<div class="col-xs-12">
 		<div class="col-md-3">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
@@ -163,47 +182,43 @@
 				</div>
 				<div class="panel-body">
                     <form class="form-inline" role="form">
-                            <div class="form-group">
                                 <label class="" for="fullName">机构名称：</label>
-                                <input type="text" id="fullName" name="fullName_like" class="databatle_query form-control" style="width: 100px"/>
-                            </div>
-                            <div class="form-group">
-                                <label class="" for="groupCode">机构代码：</label>
-                                <input type="text" id="groupCode" name="groupCode_like" class="databatle_query form-control" style="width: 100px">
-                            </div>
-                            <div class="form-group">
+                                <input type="text" id="fullName" name="fullName_like" class="databatle_query input-middle"/>
                                 <label class="" for="groupType">机构类型：</label>
-                                <select id="groupType" name="groupType.id" class="databatle_query form-control">
+                                <select id="groupType" name="groupType.id" class="databatle_query input-large">
                                     <option value=""></option>
                                     <c:forEach items="${groupTypeList}" var="groupType">
                                         <option value="${groupType.id}">${groupType.name}</option>
                                     </c:forEach>
                                 </select>
-                            </div>
-                            <button type="button" class="btn btn-primary" onclick="refreshTable();"><i class="fa fa-search"></i> 查询
-                            </button>
-                            <button type="button" class="btn btn-default" onclick="">清空</button>
+	                            
+	                            <button type="button" class="btn btn-sm btn-default" onclick="">清空</button>
+	                            <button type="button" class="btn btn-sm btn-primary" onclick="refreshTable();">
+	                            	<i class="fa fa-search"></i> 查询
+	                            </button>
                     </form>
                     </br>
 					<table id="contentTable" class="table table-striped table-bordered table-condensed table-hover">
 					    <thead>
 							<tr>
-							<th><fmt:message key="num"/></th>
-							<th><fmt:message key="group.fullName" /></th>
-							<th><fmt:message key="group.name" /></th>
-							<th><fmt:message key="group.groupType" /></th>
-							<th><fmt:message key="group.groupCode" /></th>
-							<th><fmt:message key="group.tel" /></th>
-							<th><fmt:message key="operate" /></th>
+							<th sName="id" type="checkbox"><fmt:message key="num"/></th>
+							<th sName="fullName"><fmt:message key="group.fullName" /></th>
+							<th sName="name"><fmt:message key="group.name" /></th>
+							<th sName="groupType.name"><fmt:message key="group.groupType" /></th>
+							<th sName="code"><fmt:message key="group.groupCode" /></th>
+							<th sName="tel"><fmt:message key="group.tel" /></th>
+							<th sName="operator" columnRender="formatOperator"><fmt:message key="operate" /></th>
 							</tr>
 							</thead>
 					</table>
 				</div>
 			</div>
-			<button type="button" class="btn btn-danger" id="add_btn">添加字典</button>
+			<button type="button" class="btn btn-danger" id="add_btn"><i class="fa fa-plus"></i> 添加机构</button>
+		</div>
+		</div>
+		</div>
 		</div>
 	<input type="hidden" class="databatle_query" name="parent"
 		id="parent_ID" value="${parentId}" />
-     </div>
 </body>
 </html>

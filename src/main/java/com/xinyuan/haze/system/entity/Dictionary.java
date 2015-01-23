@@ -13,7 +13,7 @@ import java.util.Set;
  * @author Sofar
  */
 @Entity
-@Table(name="SEC_DICTIONARY",uniqueConstraints={@UniqueConstraint(columnNames={"PARENT_ID","CODE"})})
+@Table(name="SYS_DICTIONARY",uniqueConstraints={@UniqueConstraint(columnNames={"PARENT_ID","CODE"})})
 @JsonIgnoreProperties(value = {"childs"})
 public class Dictionary extends SimpleBaseEntity<String> {
 	
@@ -118,6 +118,16 @@ public class Dictionary extends SimpleBaseEntity<String> {
 
 	public void setPid(String pid) {
 		this.pid = pid;
+	}
+
+	private Integer sn = 0;
+
+	public Integer getSn() {
+		return sn;
+	}
+
+	public void setSn(Integer sn) {
+		this.sn = sn;
 	}
 
 }

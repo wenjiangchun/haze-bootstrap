@@ -27,7 +27,7 @@ $.extend($.fn, {
 		}
 
 		// Add novalidate tag if HTML5.
-		this.attr( "novalidate", "novalidate" );
+		//this.attr( "novalidate", "novalidate" );
 
 		validator = new $.validator( options, this[0] );
 		$.data( this[0], "validator", validator );
@@ -45,7 +45,7 @@ $.extend($.fn, {
 
 				// allow suppressing validation by adding the html5 formnovalidate attribute to the submit button
 				if ( $(event.target).attr("formnovalidate") !== undefined ) {
-					validator.cancelSubmit = true;
+					//validator.cancelSubmit = true;
 				}
 			});
 
@@ -341,8 +341,9 @@ $.extend($.validator, {
 
 			function delegate(event) {
 				var validator = $.data(this[0].form, "validator"),
-					eventType = "on" + event.type.replace(/^validate/, ""),
-					settings = validator.settings;
+				eventType = "on" + event.type.replace(/^validate/, ""),
+				settings = validator.settings;
+                return;
 				if ( settings[eventType] && !this.is( settings.ignore ) ) {
 					settings[eventType].call(validator, this[0], event);
 				}

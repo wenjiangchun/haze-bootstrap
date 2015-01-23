@@ -9,6 +9,11 @@ import java.util.Set;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import com.xinyuan.haze.HazeUtils;
+import com.xinyuan.haze.common.utils.HazeDateUtils;
+import com.xinyuan.haze.security.shiro.CannotAnonymousAccessException;
+import com.xinyuan.haze.system.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,14 +26,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.xinyuan.haze.core.jpa.service.HazeServiceException;
 import com.xinyuan.haze.system.entity.Dictionary;
 import com.xinyuan.haze.system.entity.Group;
 import com.xinyuan.haze.system.service.DictionaryService;
 import com.xinyuan.haze.system.service.GroupService;
-import com.xinyuan.haze.web.ui.bootstrap.BootStrapComponentUtils;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
 import com.xinyuan.haze.web.ui.datatable.DataTableParames;
+import com.xinyuan.haze.web.ui.tree.TreeNode;
+import com.xinyuan.haze.web.utils.WebMessage;
 
 /**
  * 组织机构Controller
@@ -41,14 +46,21 @@ public class GroupController {
 
 	@Autowired
 	private GroupService groupService;
-	
+
+	@Autowired
+	private UserService userService;
+
 	@Autowired
 	private DictionaryService dictionaryService;
 	
 	@RequestMapping(value = "view")
 	public String list(Model model, ServletRequest request) {
-		List<Dictionary> groupTypeList = this.dictionaryService.findChildsByRootCode("groupType");
+		String parentId = request.getParameter("parentId");
+		List<Dictionary> groupTypeList = this.dictionaryService.findChildsByRootCode(Group.GROUP_TYPE);
 		model.addAttribute("groupTypeList", groupTypeList);
+		if(StringUtils.isNotBlank(parentId)){
+			model.addAttribute("parentId", parentId);
+		}
 		return "system/group/groupList";
 	}
 	
@@ -104,6 +116,7 @@ public class GroupController {
 		if (parentId != null) {
 			Group parent = this.groupService.findById(parentId);
 			model.addAttribute("parent", parent);
+			model.addAttribute("parentId", parentId);
 		}
 		List<Dictionary> groupTypeList = this.dictionaryService.findChildsByRootCode(Group.GROUP_TYPE);
 		model.addAttribute("groupTypeList", groupTypeList);
@@ -111,22 +124,27 @@ public class GroupController {
 	}
 	
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public String save(Group group, ServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-		this.groupService.save(group);
-		/*WebMessage message = new WebMessage("机构添加成功", AlertType.SUCCESS);
-		redirectAttributes.addFlashAttribute("message", message);*/
-		if (group.getParent() != null) {
-			redirectAttributes.addFlashAttribute("parentId", group.getParent().getId());
-		}
-		return "redirect:/system/group/view";
+	@ResponseBody
+	public WebMessage save(Group group, ServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
+		try{
+			 this.groupService.save(group);
+			 return WebMessage.createSuccessWebMessage();
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	        return WebMessage.createErrorWebMessage(e.getMessage());
+	    }
 	}
 	
 	@RequestMapping(value = "delete/{ids}", method = RequestMethod.GET)
-	public String delete(@PathVariable("ids") String[] ids, ServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-		this.groupService.batchDelete(ids);
-		/*WebMessage alertMessage = new WebMessage("机构删除成功", AlertType.SUCCESS);
-		redirectAttributes.addFlashAttribute("message", alertMessage);*/
-		return "redirect:/system/group/view";
+	@ResponseBody
+	public WebMessage delete(@PathVariable("ids") String[] ids, ServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
+		try{
+			this.groupService.batchDelete(ids);
+			return WebMessage.createSuccessWebMessage();
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	        return WebMessage.createErrorWebMessage(e.getMessage());
+	    }
 	}
 	
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
@@ -135,17 +153,40 @@ public class GroupController {
 		model.addAttribute("group", group);
 		List<Dictionary> groupTypeList = this.dictionaryService.findChildsByRootCode(Group.GROUP_TYPE);
 		model.addAttribute("groupTypeList", groupTypeList);
+		if(group.getParent() != null){
+			model.addAttribute("parentId", group.getParent().getId());
+		}
+		
 		return "system/group/editGroup";
 	}
 	
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(Group group, ServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-		this.groupService.save(group);
-		/*WebMessage alertMessage = new WebMessage("机构信息更新成功", AlertType.SUCCESS);
-		redirectAttributes.addFlashAttribute("message", alertMessage);*/
-		if (group.getParent() != null) {
-			redirectAttributes.addFlashAttribute("parentId", group.getParent().getId());
+	@ResponseBody
+	public WebMessage update(Group group, ServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
+		try{
+			this.groupService.save(group);
+			 return WebMessage.createSuccessWebMessage();
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	        return WebMessage.createErrorWebMessage(e.getMessage());
+	    }
+	}
+	
+	@RequestMapping(value = "getTreeNode", method = RequestMethod.POST)
+	@ResponseBody
+	public List<TreeNode> getTreeNode() {
+		return this.groupService.getTreeNode();
+	}
+
+	@RequestMapping(value = "getTreeNodeByUser", method = RequestMethod.POST)
+	@ResponseBody
+	public List<TreeNode> getTreeNodeByUser() {
+		try {
+			String userId = HazeUtils.getCurrentUser().getUserId();
+			Group g = userService.findById(userId).getGroup();
+			return this.groupService.getTreeNode(g.getId());
+		} catch (CannotAnonymousAccessException e) {
+			return this.groupService.getTreeNode();
 		}
-		return "redirect:/system/group/view";
 	}
 }

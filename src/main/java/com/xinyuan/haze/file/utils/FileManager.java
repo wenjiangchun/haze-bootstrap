@@ -50,6 +50,7 @@ public final class FileManager {
                 sp.forEach(s -> {
                     s.getFileName();
                 });
+                sp.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -249,6 +250,10 @@ public final class FileManager {
     public static boolean deletePath(String path) throws IOException {
         logger.debug("准备删除{}文件", path);
         Path p = Paths.get(path);
+        if (!Files.exists(p)) {
+        	logger.debug("路径{}文件不存在", path);
+        	return false;
+        }
         Files.walkFileTree(p, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {

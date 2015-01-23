@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.xinyuan.haze">
+	<logger name="com.xinyuan">
 		<level value="debug" />
 	</logger>
 	

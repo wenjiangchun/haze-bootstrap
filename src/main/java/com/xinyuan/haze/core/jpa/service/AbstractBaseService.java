@@ -26,7 +26,6 @@ import com.xinyuan.haze.core.jpa.repository.BaseRepository;
  * @see org.springframework.transaction.annotation.Transactional
  * @see com.xinyuan.haze.core.jpa.service.HazeServiceException
  */
-@Transactional(readOnly=true, rollbackFor=Exception.class)
 public  abstract class AbstractBaseService<T extends BaseEntity<PK>, PK extends Serializable> {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());

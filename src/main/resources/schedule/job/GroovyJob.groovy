@@ -9,4 +9,5 @@ class GroovyHelloWordJob {
 			throws JobExecutionException {
 		println "定时调用";
 	}
+
 }

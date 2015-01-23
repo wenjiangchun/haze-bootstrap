@@ -17,7 +17,7 @@ org.springframework.validation.BindException<%@ page contentType="text/html;char
 </head>
 
 <body>
-	<h2>400 - 用户输入错误.</h2>
+	<h2>400 - 用户输入错误.${exception}</h2>
 </body>
 <script type="text/javascript">
 </script>

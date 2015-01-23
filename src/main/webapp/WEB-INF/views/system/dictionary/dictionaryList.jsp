@@ -10,6 +10,7 @@
 	<script type="text/javascript">
 	    var dataTable ;
 		$(document).ready(function() {
+			initMenu("viewDictionary_Menu");
 			initDictionaryTree(); //初始化字典树
 			initDataTable(); //初始化用户分页列表
 			$("#clearBtn").click(function(){ //清空按钮
@@ -24,13 +25,14 @@
 				});
 				window.location.href="${ctx}/system/user/delete/" + ids ;
 			});
-			$("#add_btn").click(function() { //添加组织机构按钮事件
+			$("#add_btn").click(function() { //添加用户按钮事件
 				var parentId = $("#parent_ID").val();
 			    var url = "${ctx}/system/dictionary/add";
 			    if (parentId != null && parentId != "") {
 			    	url += "?parentId="+parentId;
 			    }
-				window.location.href=url;
+			    window.location.href=url;
+	            //showMyModal(url,"添加字典",callBackAction);
 			});
 		});
 		
@@ -73,75 +75,108 @@
 			refreshTable();
 		}	
 		
-		function operatorDictionary(id,operator) {
-			if (id != null) {
-				window.location.href="${ctx}/system/dictionary/"+operator+"/"+id;
-			}
-		}
-		
 		/**
-		 * 初始化用户分页列表
+		 * 初始化字典分页列表
 		 */
 		function initDataTable(groupId) {
 			var options = {
                     divId:"contentTable",
-                    url : "${ctx}/system/dictionary/search",
-                    columns:[
-                    	 {
-                    		 "sName": "id",
-                             "bSortable": false,
-                             "bSearchable":false,
-                             "sWidth":50
-                         },
-                         {
-                             "sName": "name",
-                             "bSortable": true,
-                             "sWidth":80
-                         },
-                         {
-                             "sName": "code",
-                             "bSortable": true,
-                             "sWidth":80
-                         },
-                         {
-                             "sName": "parent.name",
-                             "bSortable": false,
-                             "sWidth":80
-                         },
-                         {
-                             "sName": "isEnabled",
-                             "bSortable": false,
-                             "sWidth":80
-                         },
-                         {
-                             "sName": "operator",
-                             "bSearchable":false,
-                             "bSortable": false,
-                             "sWidth":80
-                         }
-                   ]
+                    url : "${ctx}/system/dictionary/search"
             };
 			dataTable = createTable(options);
 		}
-		function tbreresh() {
-			dataTable.fnClearTable();
+	 function callBackAction(data) {
+	        if (data != undefined) {
+	            alert(data.content);
+	            refreshTable();
+	        }
+	    }
+	 function formatParentCode(data) {
+	        if (data.parent != null) {
+	            return data.parent.name;
+	        }
+	        return "";
+	}
+	 function formatStatus(data) {
+	        if (!data.isEnabled) {
+	            return "<span class='label label-danger'>禁用</span>";
+	        }
+	        return "<span class='label label-success'>启用</span>";
+	    }
+	 function formatOperator(data) {
+	        var html = "";
+	        html += "<a href='javascript:void(0)' onclick='editDictionary(\"" + data.id + "\")' title='<fmt:message key="edit"/>'> <i class='fa fa-edit fa-lg'></i> </a> | ";
+	        html += "<a href='javascript:void(0)' onclick='deleteDictionary(\"" + data.id + "\")' title='<fmt:message key="delete"/>'> <i class='fa fa-trash-o fa-lg'></i> </a>";
+	        return html;
+	    }
+	 
+	 function editDictionary(userId) {
+	        if (userId == null || userId == "") {
+	            alert("字典ID不能为空");
+	        } else {
+	            //showMyModal("${ctx}/system/dictionary/edit/"+userId, "编辑字典", callBackAction);
+	            window.location.href = "${ctx}/system/dictionary/edit/"+userId;
+	        }
+	    }
+
+	    function deleteDictionary(id) {
+	        if (id == null || id == "") {
+	            alert("字典ID不能为空");
+	        } else {
+	            if (window.confirm("确认删除数据?")) {
+	                var id = [id];
+	                $.ajax({
+	                    method:'post',
+	                    url:'${ctx}/system/dictionary/delete/'+id,
+	                    success:function(data) {
+	                    	if(data.alertType == "SUCCESS"){
+	                        	alert("操作成功!");
+	                        }else{
+	                        	alert(data.content);
+	                        }
+	                        refreshTable();
+	                        removeTreeNodeByNodeId(id);
+	                    }
+	                });
+	            }
+	        }
+	    }
+	    
+		function removeTreeNodeByNodeId(id){
+			var treeObj = $.fn.zTree.getZTreeObj("dictionaryTree");
+		    if (id != null && id != "") {
+			  var node = treeObj.getNodeByParam("id", id);
+			  if(node != null){
+				  treeObj.removeNode(node);
+			  }
+		    }
 		}
 	</script>
 </head>
 
 <body>
-	<c:if test="${not empty message}">
-		<div id="message"
-			class="alert alert-${message.alertType.messageValue}">
-			<button data-dismiss="alert" class="close">×</button>
-			<fmt:message key="${message.content}" />
-		</div>
-	</c:if>
-	<div class="row">
-		<div class="col-md-3 alert">
+    <div class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('breadcrumbs', 'fixed')
+			} catch (e) {
+			}
+		</script>
+		<ul class="breadcrumb">
+			<li><i class="icon-home home-icon"></i> <a href="#">主页</a></li>
+			<li><a href="#">系统管理</a></li>
+			<li class="active">字典管理</li>
+		</ul>
+		<!-- .breadcrumb -->
+	</div>
+	<div class="page-content">
+		<div class="hr hr-18 hr-dotted"></div>
+		<div class="row">
+			<div class="col-xs-12">
+		<div class="col-md-3">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">字典树</h3>
+					<h3 class="panel-title"><i class="fa fa-tree"></i> 字典树</h3>
 				</div>
 				<div class="panel-body">
 					<ul id="dictionaryTree" class="ztree">
@@ -149,52 +184,49 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-9 alert">
+		<div class="col-md-9">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title">字典列表</h3>
+					<h3 class="panel-title"><i class="fa fa-book"></i> 字典列表</h3>
 				</div>
 				<div class="panel-body">
 				    <form class="form-inline" role="form">
-		<div class="form-group">
-			<label class="" for="name">字典名称：</label> <input type="text" id="name"
-				name="name_like" class="databatle_query form-control">
-		</div>
-		<div class="form-group">
-			<label class="" for="code">字典代码：</label> <input type="text" id="code"
-				name="code_like" class="databatle_query form-control" />
-		</div>
-		<div class="form-group">
-			<label class="" for="isEnabled">状态：</label> <select id="isEnabled"
-				name="isEnabled" class="databatle_query form-control">
-				<option value=""></option>
-				<option value="true">启用</option>
-				<option value="false">禁用</option>
-			</select>
-		</div>
-		<button type="button" class="btn btn-primary"
-			onclick="refreshTable();">查询</button>
-		<button type="button" class="btn btn-default" onclick="">清空</button>
-	</form>
-	 <br>
+						<label class="" for="name">字典名称：</label> 
+						<input type="text" id="name" name="name_like" class="databatle_query input-small">
+						<label class="" for="code">字典代码：</label> 
+						<input type="text" id="code" name="code_like" class="databatle_query input-small" />
+						<label class="" for="isEnabled">状态：</label>
+						<select id="isEnabled"
+							name="isEnabled" class="databatle_query input-middle">
+							<option value=""></option>
+							<option value="true">启用</option>
+							<option value="false">禁用</option>
+						</select>
+						
+						<button type="button" class="btn btn-sm btn-default" onclick="">清空</button>
+						<button type="button" class="btn btn-sm btn-primary" onclick="refreshTable();"><i class="fa fa-search"></i> 查询</button>
+					</form>
+					 <br>
 					<table id="contentTable"
 						class="table table-striped table-bordered table-condensed table-hover">
 						<thead>
 							<tr>
-								<th><fmt:message key="num" /></th>
-								<th><fmt:message key="dictionary.name" /></th>
-								<th><fmt:message key="dictionary.code" /></th>
-								<th>字典分类</th>
-								<th><fmt:message key="status" /></th>
-								<th><fmt:message key="operate" /></th>
+								<th sName="sn"><fmt:message key="num" /></th>
+								<th sName="name"><fmt:message key="dictionary.name" /></th>
+								<th sName="code"><fmt:message key="dictionary.code" /></th>
+								<th sName="parent" columnRender="formatParentCode">字典分类</th>
+								<th sName="status" columnRender="formatStatus"><fmt:message key="status" /></th>
+								<th sName="operate" columnRender="formatOperator"><fmt:message key="operate" /></th>
 							</tr>
 						</thead>
 					</table>
 				</div>
 			</div>
-			<button type="button" class="btn btn-danger" id="add_btn">添加字典</button>
+			<button type="button" class="btn btn-danger" id="add_btn"><i class="fa fa-plus"></i> 添加字典</button>
 		</div>
-	</div>
+		</div>
+		</div>
+		</div>
 	<input type="hidden" class="databatle_query" name="parent"
 		id="parent_ID" value="${parentId}" />
 </body>

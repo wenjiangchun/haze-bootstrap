@@ -1,3 +1,2 @@
-haze-bootstrap
-==============
-Spring4 + Hibernate + Spring MVC + Spring Data Jpa + Maven3
+说明：
+1. 启动后在配置管理里面配置配置代码=ROOT_FOLDER_PATH的属性，该属性表示OA系统附件存放地址

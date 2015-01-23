@@ -70,7 +70,7 @@ public class RoleService extends AbstractBaseService<Role, String>{
 			logger.info("保存角色成功，角色名为{}", role.getName());
 			this.roleDao.save(role);
 		}
-		return r;
+		return role;
 	}
 	
 	/**
@@ -132,6 +132,7 @@ public class RoleService extends AbstractBaseService<Role, String>{
 			resources.add(resource);
 			role.setResources(resources);
 		}
+		this.saveOrUpdate(role);
 	}
 	
 	/**

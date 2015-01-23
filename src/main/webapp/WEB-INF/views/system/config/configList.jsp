@@ -8,6 +8,7 @@
    <%@ include file="/resources/impDatatable.jsp"%> 
    <script type="text/javascript">
 	$(document).ready(function() {
+		initMenu("viewConfig_Menu");
 		initDataTable();
        /* $('#contentTable').contextmenu({
             target: '#context-menu1',
@@ -22,7 +23,8 @@
             }
         });*/
         $("#add_btn").click(function() {
-            showMyModal("${ctx}/system/config/add","添加配置" ,callBackAction);
+            //showMyModal("${ctx}/system/config/add","添加配置" ,callBackAction);
+            window.location.href="${ctx}/system/config/add";
         });
 		});
 
@@ -68,7 +70,10 @@
      */
     function editConfig(id) {
         if (notNull(id)) {
-            top.showMyModal("${ctx}/system/config/edit/"+id, "<fmt:message key="edit" /><fmt:message key="config" />", callBackAction);
+            //top.showMyModal("${ctx}/system/config/edit/"+id, "<fmt:message key="edit" /><fmt:message key="config" />", callBackAction);
+        	window.location.href = "${ctx}/system/config/edit/"+id;
+        }else{
+        	alert("数据id不能为空");
         }
     }
 
@@ -104,26 +109,39 @@
 </script>
 </head>
 <body>
-    <ol class="breadcrumb">
-        <li><a href="#"><fmt:message key="home"/></a></li>
-        <li><a href="#"><fmt:message key="system"/><fmt:message key="manager"/></a></li>
-        <li class="active"><fmt:message key="config"/><fmt:message key="manager"/></li>
-    </ol>
-	<div class="panel panel-primary" data-toggle="context" data-target="#context-menu">
-		<div class="panel-heading">
-			<h3 class="panel-title"><i class="fa fa-cog"></i> <fmt:message key="config"/><fmt:message key="list"/></h3>
-		</div>
-		<div class="panel-body">
+   <div class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('breadcrumbs', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<ul class="breadcrumb">
+			<li><i class="icon-home home-icon"></i> <a href="#">主页</a></li>
+			<li><a href="#">系统管理</a></li>
+			<li class="active">配置管理</li>
+		</ul>
+		<!-- .breadcrumb -->
+	</div>
+	<div class="page-content">
+		<div class="hr hr-18 hr-dotted"></div>
+		<div class="row">
+			<div class="col-xs-12">
 		   <form class="form-inline" role="form">
-				<div class="form-group">
-					<label class="" for="name"><fmt:message key="config.name"/>：</label> <input type="text"
-						id="name" name="name_like" class="databatle_query form-control">
-				</div>
-				<button type="button" class="btn btn-primary"
-					onclick="refreshTable();"><i class="fa fa-search"></i> <fmt:message key="search"/></button>
-				<button type="button" class="btn btn-default" onclick=""><fmt:message key="clear"/></button>
+				<label class="" for="name"><fmt:message key="config.name"/>：</label> 
+				<input type="text" id="name" name="name_like" class="databatle_query input-middle">
+				
+				<button type="button" class="btn btn-sm btn-default" onclick=""><fmt:message key="clear"/></button>
+				<button type="button" class="btn btn-sm btn-primary" onclick="refreshTable();">
+					<i class="fa fa-search"></i> <fmt:message key="search"/>
+				</button>
 			</form>
-			<br>
+			<div class="hr hr-18 hr-dotted"></div>
+				<div class="table-header">
+					<i class="fa fa-cog"></i> 配置列表
+				</div>
+				<div class="table-responsive">
 		   <table id="contentTable"
 				class="table table-striped table-bordered table-condensed table-hover" data-toggle="context">
 				<thead>
@@ -136,11 +154,14 @@
 					</tr>
 				</thead>
 			</table>
-		   </div>
-	</div>
-	<button type="button" class="btn btn-danger" id="add_btn">
+			<div class="hr hr-18 hr-dotted"></div>
+			<button type="button" class="btn btn-danger" id="add_btn">
         <i class="fa fa-plus-circle"></i> <fmt:message key="add"/><fmt:message key="config"/>
 	</button>
+		  </div>
+			</div>
+		</div>
+	</div>
     <%--<div id="context-menu">
         <ul class="dropdown-menu" role="menu">
             <li><a tabindex="-1" href="#">Action</a></li>

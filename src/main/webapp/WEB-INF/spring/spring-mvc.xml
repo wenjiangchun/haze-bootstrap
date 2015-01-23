@@ -11,9 +11,23 @@
 	<context:component-scan base-package="com.xinyuan" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
+
+	<mvc:annotation-driven>   
+    	<mvc:message-converters>     
+	        <ref bean="stringHttpMessageConverter" />  
+	    </mvc:message-converters>     
+	</mvc:annotation-driven>  
 	
-	<mvc:annotation-driven/>
-	
+    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">  
+        <constructor-arg value="UTF-8" index="0"></constructor-arg>
+        <property name="supportedMediaTypes">  
+            <list>  
+                <value>text/plain;charset=UTF-8</value>     
+	            <value>text/html;charset=UTF-8</value>    
+            </list>  
+        </property>  
+    </bean>
+    
 	<!-- 将无法mapping到Controller的path交给default servlet handler处理 -->
 	<mvc:default-servlet-handler/>
 	
@@ -60,5 +74,9 @@
         <property name="defaultThemeName" value="default" />  
      </bean>  
 
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />  
+
     <bean class="com.xinyuan.haze.core.spring.utils.SpringContextUtils"/>
+    
+      
 </beans>

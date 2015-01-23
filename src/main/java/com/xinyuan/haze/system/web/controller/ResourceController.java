@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,10 +24,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.xinyuan.haze.system.entity.Resource;
 import com.xinyuan.haze.system.service.ResourceService;
 import com.xinyuan.haze.system.utils.ResourceType;
-import com.xinyuan.haze.web.ui.bootstrap.BootStrapComponentUtils;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
 import com.xinyuan.haze.web.ui.datatable.DataTableParames;
-import com.xinyuan.haze.web.utils.AlertType;
+import com.xinyuan.haze.web.ui.tree.TreeNode;
 import com.xinyuan.haze.web.utils.WebMessage;
 
 /**
@@ -69,28 +69,34 @@ public class ResourceController {
 	}
 	
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public String save(Resource resource, ServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-		if (resource.getParent() != null && resource.getParent().getId() == null) {
+	@ResponseBody
+	public WebMessage save(Resource resource, ServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
+		if (resource.getParent() != null && StringUtils.isBlank(resource.getParent().getId())) {
 			resource.setParent(null);
 		}
-		this.resourceService.saveOrUpdate(resource);
-		WebMessage message = new WebMessage("资源添加成功", AlertType.SUCCESS);
-		redirectAttributes.addFlashAttribute("message", message);
-		return "redirect:/system/resource/view/";
+		
+		try {
+			this.resourceService.saveOrUpdate(resource);
+            return WebMessage.createSuccessWebMessage();
+        } catch (Exception e) {
+            return WebMessage.createErrorWebMessage(e.getMessage());
+        }
+		//return "redirect:/system/resource/view";
 	}
 	
 	@RequestMapping(value = "getResources")
 	@ResponseBody
-	public List<Resource> getResources(ServletRequest request, ServletResponse response) {
+	public List<TreeNode> getResources(ServletRequest request, ServletResponse response) {
 		List<Resource> resourceList = this.resourceService.findAll();
-		Set<Resource> newResourceList = new HashSet<Resource>();
+		List<TreeNode> treeNodeList = new ArrayList<TreeNode>();
 		for (Resource resource : resourceList) {
-			resource.setChildrens(null);
-			resource.setRoles(null);
-			resource.setUrl(null);
-			newResourceList.add(resource);
+			TreeNode treeNode = new TreeNode();
+			treeNode.setId(resource.getId());
+			treeNode.setName(resource.getName());
+			treeNode.setParentId(resource.getParent() != null ? resource.getParent().getId() : null);
+			treeNodeList.add(treeNode);
 		}
-		return new ArrayList<Resource>(newResourceList);
+		return treeNodeList;
 	}
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable String id, Model model, ServletRequest request) {

@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,19 +24,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.xinyuan.haze.system.entity.Dictionary;
 import com.xinyuan.haze.system.service.DictionaryService;
-import com.xinyuan.haze.system.utils.Status;
-import com.xinyuan.haze.web.ui.bootstrap.BootStrapComponentUtils;
-import com.xinyuan.haze.web.ui.bootstrap.css.SpanType;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
 import com.xinyuan.haze.web.ui.datatable.DataTableParames;
-import com.xinyuan.haze.web.utils.AlertType;
 import com.xinyuan.haze.web.utils.WebMessage;
 
 
 /**
  * 字典对象Controller
- * @author wenjiangchun
- *
+ * 
+ * @author sofar
  */
 @Controller
 @RequestMapping(value = "/system/dictionary")
@@ -46,6 +43,10 @@ public class DictionaryController {
 	
 	@RequestMapping(value = "view")
 	public String list(Model model, ServletRequest request) {
+		String parentId = request.getParameter("parentId");
+		if(StringUtils.isNotBlank(parentId)){
+			model.addAttribute("parentId", parentId);
+		}
 		return "system/dictionary/dictionaryList";
 	}
 	
@@ -70,13 +71,6 @@ public class DictionaryController {
 		return dtp;
 	}
 	
-	private String getEnabledLabel(boolean isEnabled) {
-		Status status = isEnabled ? Status.E : Status.D;
-		String text = status.getStatusName();
-		SpanType spanType = SpanType.getSpanTypeByStatus(status);
-		return BootStrapComponentUtils.createSpan(null, spanType, text).getHtml();
-	}
-	
 	@RequestMapping(value = "getDictionaryTree")
 	@ResponseBody
 	public List<Dictionary> getDictionaryTree(ServletRequest request, ServletResponse response) {
@@ -86,7 +80,6 @@ public class DictionaryController {
 		root.setName("字典树");
 		for (Dictionary g : dictionarys) {
 			g.setChilds(null);
-			
 			if (g.getPid() == null) {
 				g.setParent(root);
 			}
@@ -109,25 +102,25 @@ public class DictionaryController {
 	}
 	
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public String save(Dictionary dictionary, ServletRequest request, RedirectAttributes redirectAttributes) {
+	@ResponseBody
+	public WebMessage save(Dictionary dictionary, ServletRequest request, RedirectAttributes redirectAttributes) {
 		try {
 			this.dictionaryService.saveOrUpdate(dictionary);
+			return WebMessage.createSuccessWebMessage();
 		} catch (Exception e) {
+			return WebMessage.createErrorWebMessage(e.getMessage());
 		}
-		WebMessage message = new WebMessage("字典"+dictionary+"添加成功", AlertType.SUCCESS);
-		redirectAttributes.addFlashAttribute("message", message);
-		if (dictionary.getParent() != null) {
-			redirectAttributes.addFlashAttribute("parentId", dictionary.getParent().getId());
-		}
-		return "redirect:/system/dictionary/view";
 	}
 	
-	@RequestMapping(value = "delete/{ids}", method = RequestMethod.GET)
-	public String delete(@PathVariable("ids") String[] ids, ServletRequest request, RedirectAttributes redirectAttributes) {
-		this.dictionaryService.batchDelete(ids);
-		/*WebMessage alertMessage = new WebMessage("字典删除成功", AlertType.SUCCESS);
-		redirectAttributes.addFlashAttribute("message", alertMessage);*/
-		return "redirect:/system/dictionary/view";
+	@RequestMapping(value = "delete/{ids}")
+	@ResponseBody
+	public WebMessage delete(@PathVariable("ids") String[] ids, ServletRequest request) {
+		try {
+            this.dictionaryService.batchDelete(ids);
+            return WebMessage.createSuccessWebMessage();
+        } catch (Exception e) {
+            return WebMessage.createErrorWebMessage(e.getMessage());
+        }
 	}
 	
 	@RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
@@ -137,15 +130,15 @@ public class DictionaryController {
 		return "system/dictionary/editDictionary";
 	}
 	
-	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(Dictionary dictionary, ServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-		this.dictionaryService.saveOrUpdate(dictionary);
-		/*WebMessage message = new WebMessage("字典"+dictionary+"更新成功", AlertType.SUCCESS);
-		redirectAttributes.addFlashAttribute("message", message);*/
-		if (dictionary.getParent() != null) {
-			redirectAttributes.addFlashAttribute("parentId", dictionary.getParent().getId());
+	@RequestMapping(value = "update")
+	@ResponseBody
+	public WebMessage update(Dictionary dictionary, ServletRequest request) {
+		try {
+			this.dictionaryService.saveOrUpdate(dictionary);
+			return WebMessage.createSuccessWebMessage();
+		} catch (Exception e) {
+			return WebMessage.createErrorWebMessage(e.getMessage());
 		}
-		return "redirect:/system/dictionary/view";
 	}
 	
 	/**

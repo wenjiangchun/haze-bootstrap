@@ -5,10 +5,11 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title><fmt:message key="add"/><fmt:message key="config"/></title>
+	<title><fmt:message key="add"/><fmt:message key="group"/></title>
 	<%@ include file="/resources/impForm.jsp"%> 
 	<script type="text/javascript">
 		$(document).ready(function() {
+			initMenu("viewGroup_Menu");
 			var rules = {
 					"fullName":{required:true}
 			};
@@ -20,9 +21,30 @@
 	</script>
 </head>
 <body>
-	<form:form id="inputForm" modelAttribute="group" action="${ctx}/system/group/save" method="post" role="form" class="form-horizontal">
+<div class="breadcrumbs" id="breadcrumbs">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('breadcrumbs', 'fixed')
+			} catch (e) {
+			}
+		</script>
+
+		<ul class="breadcrumb">
+			<li><i class="icon-home home-icon"></i> <a href="#">主页</a></li>
+			<li><a href="#">系统管理</a></li>
+			<li><a href="${ctx}/system/group/view">机构管理</a></li>
+			<li class="active">添加机构</li>
+		</ul>
+		<!-- .breadcrumb -->
+	</div>
+	<div class="page-content">
+    <div class="row">
+			<div class="col-xs-10">
+	<form:form id="inputForm" modelAttribute="group" action="${ctx}/system/group/save" method="post" role="form" class="form-horizontal" directUrl="${ctx}/system/group/view?parentId=${parentId}">
 		<fieldset>
-			<legend><fmt:message key="add" /><fmt:message key="group" /></legend>
+		<div class="panel panel-info">
+			  <div class="panel-heading"><strong><i class="fa fa-group green"></i> 基本信息</strong></div>
+			  <div class="panel-body">
 			<div class="form-group">
 				<label for="fullName" class="col-sm-2 control-label"><fmt:message key="group.fullName"/>:</label>
 				<div class="col-xs-4">
@@ -46,9 +68,9 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="groupCode" class="col-sm-2 control-label"><fmt:message key="group.groupCode"/>:</label>
+				<label for="code" class="col-sm-2 control-label"><fmt:message key="group.groupCode"/>:</label>
 				<div class="col-xs-4">
-				   <input type="text" id="groupCode" name="groupCode" class="form-control"/>
+				   <input type="text" id="code" name="code" class="form-control"/>
 				</div>
 			</div>
 			<div class="form-group">
@@ -76,16 +98,24 @@
 				   <input type="text" id="address" name="address" class="form-control"/>
 				</div>
 			</div>
+              <div class="form-group">
+                  <label for="remark" class="col-sm-2 control-label">备注:</label>
+                  <div class="col-xs-4">
+                      <input type="text" id="remark" name="remark" class="form-control"/>
+                  </div>
+              </div>
+			</div>
+			</div>
 			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<input id="submit_btn" class="btn btn-primary" type="submit" value="<fmt:message key="submit"/>"/>&nbsp;	
-				<input id="cancel_btn" class="btn" type="button" value="<fmt:message key="cancel"/>" onclick="history.back()"/>
+	            <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> <fmt:message key="submit"/></button>
+                    <button type="reset" class="btn btn-danger"><fmt:message key="reset"/></button>
 				</div>
 			</div>
-			<c:if test="${parentId != null }">
-				<input type="hidden" name="parent.id" value="${parentId}"/>
-			</c:if>
 		</fieldset>
 	</form:form>
+	</div>
+	</div>
+	</div>
 </body>
 </html>
