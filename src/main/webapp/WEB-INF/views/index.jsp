@@ -4,10 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<script type="text/javascript" src="${ctx}/resources/js/uaredirect.js"></script>
-	<script>
-		uaredirect("${ctx}/m/login");
-	</script>
+
 </head>
 <body>
 <div class="breadcrumbs" id="breadcrumbs">

@@ -117,13 +117,21 @@
 					</a>
 
 					<b class="arrow"></b>
+				</li><li class="">
+					<a href="${ctx}/system/support/view" id="viewSupport_Menu">
+						<i class="menu-icon fa fa-caret-right"></i>
+						<i class="fa fa-wrench"></i>
+						系统辅助
+					</a>
+
+					<b class="arrow"></b>
 				</li>
 			</ul>
 		</li>
 
 		<li class="">
 			<a href="#" class="dropdown-toggle">
-				<i class="menu-icon icon-angle-down"></i>
+				<i class="menu-icon fa fa-exchange"></i>
 				<span class="menu-text"> 流程管理 </span>
 
 				<b class="arrow fa fa-angle-down"></b>
@@ -147,6 +155,29 @@
 						流程实例
 					</a>
 
+					<b class="arrow"></b>
+				</li>
+			</ul>
+		</li>
+
+
+		<li class="">
+			<a href="#" class="dropdown-toggle">
+				<i class="menu-icon"></i>
+				<span class="menu-text"> Demo演示 </span>
+
+				<b class="arrow fa fa-angle-down"></b>
+			</a>
+
+			<b class="arrow"></b>
+
+			<ul class="submenu">
+				<li class="">
+					<a href="${ctx}/demo/matrix/view/" id="viewBarcode_Menu">
+						<i class="menu-icon fa fa-caret-right"></i>
+						<i class="fa fa-barcode"></i>
+						二维码演示
+					</a>
 					<b class="arrow"></b>
 				</li>
 			</ul>

@@ -380,8 +380,9 @@
 
                 e.preventDefault();
             });
-
+            $('#btn-login-light').click();
         });
+
     </script>
 </body>
 </html>
