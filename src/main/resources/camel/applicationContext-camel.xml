@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:camel="http://camel.apache.org/schema/spring"
+	   xsi:schemaLocation="
+          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <description>Spring Camel Configuration Description</description>
+    <camelContext id="camel5" xmlns="http://camel.apache.org/schema/spring">
+        <propertyPlaceholder id="properties" location="camel/camel.properties"/>
+        <package>com.xinyuan.haze.demo.camel</package>
+        <routeBuilder ref="myRouteBuilder" />
+        <!--<route id="upload">
+            <from uri="{{location.path}}?delay=60000&amp;bufferSize=1024&amp;filter=#bossUpLoadFilter&amp;readLockTimeout=30000"/>
+            <to uri="{{ftp.url}}&amp;binary=true&amp;tempPrefix=temp&amp;bufferSize=1024&amp;localWorkDirectory=/temp&amp;ftpClient.dataTimeout=300000"/>
+        </route>-->
+       <!-- <route id="downLoad">
+            <from uri="{{ftp.url}}&amp;binary=true&amp;tempPrefix=temp&amp;bufferSize=1024&amp;localWorkDirectory=/temp&amp;ftpClient.dataTimeout=300000&amp;filter=#bossDownLoadFilter&amp;delay=60000&amp;delete=true"/>
+            <to uri="{{location.path}}?bufferSize=1024&amp;readLockTimeout=30000"/>
+        </route>-->
+    </camelContext>
+    <bean id="bossDownLoadFilter" class="com.xinyuan.haze.demo.camel.BossFTPDownLoadFilter">
+        <!--需要下载的文件名前缀-->
+        <property name="filePrefix" value="BOSS"/>
+    </bean>
+    <bean id="myRouteBuilder" class="com.xinyuan.haze.demo.camel.BossFTPRouteBuilder"/>
+</beans>
