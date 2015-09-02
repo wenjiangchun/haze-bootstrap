@@ -55,6 +55,7 @@
                 /resources/** = anon
                 /index = authc
                 /validateCode = anon
+                /cxf/** = anon
                 /=authc
             </value>
         </property>

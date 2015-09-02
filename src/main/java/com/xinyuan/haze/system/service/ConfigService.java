@@ -44,7 +44,7 @@ public class ConfigService extends AbstractBaseService<Config, String> {
         Assert.notNull(code);
         List<Config> configList = this.configDao.findByProperty("code", code);
         if (configList.isEmpty()) {
-            logger.error("配置代码为[{}]的配置对象不存在，请添加对应配置信息！");
+            logger.error("配置代码为[{}]的配置对象不存在，请添加对应配置信息！", code);
             return null;
         }
         if (configList.size() > 1) {

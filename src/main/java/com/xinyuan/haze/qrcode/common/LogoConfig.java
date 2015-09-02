@@ -17,12 +17,12 @@ public class LogoConfig {
     /**
      * logo默认边框宽度(像素)
      */
-    public static final int DEFAULT_BORDER_WIDTH = 1;
+    public static final int DEFAULT_BORDER_WIDTH = 5;
 
     /**
      * logo大小默认为照片的1/5
      */
-    public static final int DEFAULT_LOGO_PART = 8;
+    public static final int DEFAULT_LOGO_PART = 4;
 
     private final int border = DEFAULT_BORDER_WIDTH;
 
