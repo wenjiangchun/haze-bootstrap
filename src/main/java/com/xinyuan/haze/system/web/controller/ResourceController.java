@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import com.xinyuan.haze.web.utils.TreeNode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,6 @@ import com.xinyuan.haze.system.service.ResourceService;
 import com.xinyuan.haze.system.utils.ResourceType;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
 import com.xinyuan.haze.web.ui.datatable.DataTableParames;
-import com.xinyuan.haze.web.ui.tree.TreeNode;
 import com.xinyuan.haze.web.utils.WebMessage;
 
 /**

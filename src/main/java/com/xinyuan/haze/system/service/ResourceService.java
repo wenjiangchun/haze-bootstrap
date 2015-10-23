@@ -34,6 +34,7 @@ public class ResourceService extends AbstractBaseService<Resource, String>{
 		super.setDao(resourceDao);
 	}
 
+
 	/**
 	 * 保存或更新资源对象 同时清空shiro缓存对象
 	 * @param resource 资源对象

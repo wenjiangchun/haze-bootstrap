@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.xinyuan.haze.system.dao.UserDao;
+import com.xinyuan.haze.web.utils.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,6 @@ import com.xinyuan.haze.system.dao.GroupDao;
 import com.xinyuan.haze.system.entity.Group;
 import com.xinyuan.haze.system.entity.User;
 import com.xinyuan.haze.system.utils.Status;
-import com.xinyuan.haze.web.ui.tree.TreeNode;
 
 /**
  * 组织机构业务操作类

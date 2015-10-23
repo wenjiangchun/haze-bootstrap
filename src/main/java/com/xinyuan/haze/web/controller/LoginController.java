@@ -4,9 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
 
+import com.xinyuan.haze.core.spring.utils.SpringContextUtils;
+import com.xinyuan.haze.soa.camel.spring.SpringCamelContextUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +29,17 @@ public class LoginController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
+		//springCamelContextUtils.getRouts();
+
+		//activiti/applicationContext-activiti.xm
+		//SpringContextUtils.loadBeanDefinition("camel/applicationContext-camel.xml");
+		//SpringCamelContextUtils springCamelContextUtils = SpringContextUtils.getBean(SpringCamelContextUtils.class);
+		//springCamelContextUtils.getRouts();
+		try {
+			SpringCamelContextUtils.addRoute(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if (!SecurityUtils.getSubject().isAuthenticated()) {
 			return "login";
 		}

@@ -13,6 +13,7 @@ import com.xinyuan.haze.HazeUtils;
 import com.xinyuan.haze.common.utils.HazeDateUtils;
 import com.xinyuan.haze.security.shiro.CannotAnonymousAccessException;
 import com.xinyuan.haze.system.service.UserService;
+import com.xinyuan.haze.web.utils.TreeNode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,6 @@ import com.xinyuan.haze.system.service.DictionaryService;
 import com.xinyuan.haze.system.service.GroupService;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
 import com.xinyuan.haze.web.ui.datatable.DataTableParames;
-import com.xinyuan.haze.web.ui.tree.TreeNode;
 import com.xinyuan.haze.web.utils.WebMessage;
 
 /**
@@ -185,7 +185,7 @@ public class GroupController {
 			String userId = HazeUtils.getCurrentUser().getUserId();
 			Group g = userService.findById(userId).getGroup();
 			return this.groupService.getTreeNode(g.getId());
-		} catch (CannotAnonymousAccessException e) {
+		} catch (com.xinyuan.haze.security.shiro.CannotAnonymousAccessException e) {
 			return this.groupService.getTreeNode();
 		}
 	}

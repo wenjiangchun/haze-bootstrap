@@ -18,5 +18,5 @@
 <mapping path="/admin/*" decorator="/admin-decorator.html"/>
 <mapping path="/login*" exclue="true"/>
 <mapping path="/resources/*" exclue="true"/>
-<mapping path="/cxf/*" exclue="true"/>
+<mapping path="/cxf*" exclue="true"/>
 </sitemesh>

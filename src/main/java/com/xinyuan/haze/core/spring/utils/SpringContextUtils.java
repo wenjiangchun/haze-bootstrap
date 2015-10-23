@@ -1,10 +1,14 @@
 package com.xinyuan.haze.core.spring.utils;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import java.util.Locale;
@@ -92,4 +96,10 @@ public final class SpringContextUtils implements ApplicationContextAware {
         return ctx.getMessage(message, args, locale);
     }
 
+    public static void loadBeanDefinition(String resourcePath) {
+        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) ctx.getAutowireCapableBeanFactory();
+        ClassPathResource resource = new ClassPathResource(resourcePath);
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(defaultListableBeanFactory);
+        reader.loadBeanDefinitions(resource);
+    }
 }

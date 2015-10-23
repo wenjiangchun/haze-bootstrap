@@ -26,7 +26,6 @@ import com.xinyuan.haze.system.service.RoleService;
 import com.xinyuan.haze.system.service.UserService;
 import com.xinyuan.haze.system.utils.Sex;
 import com.xinyuan.haze.system.utils.Status;
-import com.xinyuan.haze.system.utils.UserType;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
 import com.xinyuan.haze.web.ui.datatable.DataTableParames;
 import com.xinyuan.haze.web.utils.WebMessage;
@@ -52,7 +51,7 @@ public class UserController {
 	@RequestMapping(value = "view")
 	public String list(Model model, ServletRequest request) {
 		model.addAttribute("statuss", Status.values());
-		model.addAttribute("userTypes", UserType.values());
+//		model.addAttribute("userTypes", UserType.values());
 		String selectGroupId = request.getParameter("groupId");
 		model.addAttribute("groupId", selectGroupId);
 		return "system/user/userList";
@@ -77,7 +76,7 @@ public class UserController {
 		if (queryVairables != null && queryVairables.get("userType") != null) {
 			String value = (String) queryVairables.get("userType");
             //将传递进来的status字符串转化为Status枚举对象
-			queryVairables.put("userType", UserType.valueOf(value));
+//			queryVairables.put("userType", UserType.valueOf(value));
 		}
 		if (queryVairables.get("group.id") != null) {
 			String groupId = (String) queryVairables.get("group.id");
@@ -103,7 +102,7 @@ public class UserController {
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("sexs", Sex.values());
 		model.addAttribute("statuss", Status.values());
-		model.addAttribute("userTypes", UserType.values());
+//		model.addAttribute("userTypes", UserType.values());
 		model.addAttribute("groupList",groupList);
 		return "system/user/addUser";
 	}
@@ -238,7 +237,7 @@ public class UserController {
 	public String edit(@PathVariable String id, Model model, ServletRequest request) {
 		model.addAttribute("sexs", Sex.values());
 		model.addAttribute("statuss", Status.values());
-		model.addAttribute("userTypes", UserType.values());
+//		model.addAttribute("userTypes", UserType.values());
 		User user = this.userService.findById(id);
 		List<Group> groupList = this.groupService.findAll();
 		model.addAttribute("user", user);
@@ -260,7 +259,7 @@ public class UserController {
 		u.setEmail(user.getEmail());
 		u.setSex(user.getSex());
 		u.setStatus(user.getStatus());
-		u.setUserType(user.getUserType());
+//		u.setUserType(user.getUserType());
 		u.setSn(user.getSn());
 		u.setSignaturePath(user.getSignaturePath());
 		u.setBakGroupId(user.getBakGroupId());

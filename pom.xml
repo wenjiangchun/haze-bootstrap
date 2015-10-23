@@ -8,14 +8,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <spring.version>4.2.1.RELEASE</spring.version>
+        <spring.version>4.2.2.RELEASE</spring.version>
         <hibernate.version>5.0.0.Final</hibernate.version>
         <hibernate.validator.version>5.2.1.Final</hibernate.validator.version>
         <spring-data-jpa.version>1.8.1.RELEASE</spring-data-jpa.version>
         <slf4j.version>1.7.12</slf4j.version>
         <activiti.version>5.13</activiti.version>
-        <camel.version>2.15.1</camel.version>
-        <cxf-version>2.7.3</cxf-version>
+        <camel.version>2.15.0</camel.version>
+        <cxf-version>3.0.4</cxf-version>
     </properties>
     <dependencies>
         <dependency>
@@ -113,13 +113,8 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.185</version>
+            <scope>runtime</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.oracle</groupId>-->
-            <!--<artifactId>ojdbc6</artifactId>-->
-            <!--<version>11.2.0.1.0</version>-->
-            <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -152,11 +147,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.4.2</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>opensymphony</groupId>-->
-            <!--<artifactId>sitemesh</artifactId>-->
-            <!--<version>2.4.2</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.sitemesh</groupId>
             <artifactId>sitemesh</artifactId>
@@ -192,12 +182,7 @@
             <artifactId>poi-scratchpad</artifactId>
             <version>3.10-FINAL</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
@@ -208,22 +193,17 @@
             <artifactId>activiti-spring</artifactId>
             <version>5.16.4</version>
         </dependency>
+
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
+            <groupId>com.jspsmart</groupId>
+            <artifactId>upload</artifactId>
+            <version>1.0</version>
         </dependency>
-		<dependency>
-		  <groupId>com.jspsmart</groupId>
-		  <artifactId>upload</artifactId>
-		  <version>1.0</version>
-		</dependency>
-		<dependency>
-		  <groupId>org.apache.common</groupId>
-		  <artifactId>vfs</artifactId>
-		  <version>1.0</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.common</groupId>
+            <artifactId>vfs</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <!-- apache camel -->
         <dependency>
@@ -241,6 +221,32 @@
             <artifactId>camel-ftp</artifactId>
             <version>${camel.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-http</artifactId>
+            <version>2.15.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-servlet_3.0_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-cxf</artifactId>
+            <version>2.15.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-servlet</artifactId>
+            <version>2.15.0</version>
+        </dependency>
 
         <!-- 二维码 -->
         <dependency>
@@ -252,7 +258,7 @@
         <!-- cxf -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-api</artifactId>
+            <artifactId>cxf-core</artifactId>
             <version>${cxf-version}</version>
         </dependency>
         <dependency>
@@ -265,7 +271,21 @@
             <artifactId>cxf-rt-transports-http</artifactId>
             <version>${cxf-version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+            <version>${cxf-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-servlet_3.0_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jms</artifactId>
@@ -275,6 +295,20 @@
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-spring</artifactId>
             <version>5.11.0</version>
+        </dependency>
+
+        <!-- Test Dependencies-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -303,41 +337,41 @@
         <profile>
             <id>initDB</id>
             <build>
-               <plugins>
-                   <plugin>
-                       <groupId>org.codehaus.mojo</groupId>
-                       <artifactId>sql-maven-plugin</artifactId>
-                       <version>1.5</version>
-                       <dependencies>
-                           <dependency>
-                               <groupId>com.h2database</groupId>
-                               <artifactId>h2</artifactId>
-                               <version>1.4.178</version>
-                           </dependency>
-                       </dependencies>
-                       <configuration>
-                           <driver>org.h2.Driver</driver>
-                           <url>jdbc:h2:file:~/.h2/haze;AUTO_SERVER=TRUE</url>
-                           <username>sa</username>
-                           <password></password>
-                       </configuration>
-                       <executions>
-                           <execution>
-                               <phase>initialize</phase>
-                               <goals>
-                                   <goal>execute</goal>
-                               </goals>
-                               <!-- specific configuration for this execution -->
-                               <configuration>
-                                   <!-- specify your SQL commands, can be all of the following configurations -->
-                                   <srcFiles>
-                                       <!--<srcFile>src/main/resources/sql/h2/tables_h2.sql</srcFile>-->
-                                   </srcFiles>
-                               </configuration>
-                           </execution>
-                       </executions>
-                   </plugin>
-               </plugins>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <version>1.5</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.h2database</groupId>
+                                <artifactId>h2</artifactId>
+                                <version>1.4.178</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <driver>org.h2.Driver</driver>
+                            <url>jdbc:h2:file:~/.h2/haze;AUTO_SERVER=TRUE</url>
+                            <username>sa</username>
+                            <password></password>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <!-- specific configuration for this execution -->
+                                <configuration>
+                                    <!-- specify your SQL commands, can be all of the following configurations -->
+                                    <srcFiles>
+                                        <!--<srcFile>src/main/resources/sql/h2/tables_h2.sql</srcFile>-->
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
     </profiles>

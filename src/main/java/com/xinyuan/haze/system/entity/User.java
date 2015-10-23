@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.xinyuan.haze.core.jpa.entity.SimpleBaseEntity;
 import com.xinyuan.haze.system.utils.Sex;
 import com.xinyuan.haze.system.utils.Status;
-import com.xinyuan.haze.system.utils.UserType;
 
 import javax.persistence.*;
 
@@ -63,11 +62,7 @@ public class User extends SimpleBaseEntity<String> {
 	 */
 	private Status status;
 	
-	/**
-	 * 用户类型
-	 */
-	@Enumerated(EnumType.STRING)
-	private UserType userType;
+
 	
 	private String salt;
 	
@@ -111,15 +106,6 @@ public class User extends SimpleBaseEntity<String> {
 
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	
-	public UserType getUserType() {
-		return userType;
-	}
-
-	public void setUserType(UserType userType) {
-		this.userType = userType;
 	}
 
 	public String getLoginName() {
