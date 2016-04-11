@@ -1,5 +1,6 @@
 package com.xinyuan.haze.web.controller;
 
+import com.xinyuan.haze.core.spring.utils.SpringContextUtils;
 import com.xinyuan.haze.system.entity.Resource;
 import com.xinyuan.haze.system.service.ResourceService;
 import org.apache.shiro.session.Session;
@@ -34,6 +35,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/")
 	public String index(HttpServletRequest request, Model model,  HttpServletResponse response) {
+		//SpringContextUtils.loadBeanDefinition("camel/applicationContext-camel.xml");
 		return "index";
 	}
 	

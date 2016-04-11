@@ -246,4 +246,14 @@ public class UserService extends AbstractBaseService<User, String> {
             return this.userDao.findByUserNameOrGroupName("%" + text + "%", Status.E);
         }
     }
+
+	public String getName1(String aaa) {
+		logger.debug("测试输出" + aaa);
+		return "";
+	}
+
+	public String getSay(String aaa) {
+		logger.debug("测试输出" + aaa);
+		return "";
+	}
 }

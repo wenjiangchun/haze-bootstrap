@@ -54,6 +54,8 @@ public class UserController {
 //		model.addAttribute("userTypes", UserType.values());
 		String selectGroupId = request.getParameter("groupId");
 		model.addAttribute("groupId", selectGroupId);
+		System.out.println("fasdfasd的发");
+		userService.getSay("啊啊啊");
 		return "system/user/userList";
 	}
 	
@@ -238,7 +240,10 @@ public class UserController {
 		model.addAttribute("sexs", Sex.values());
 		model.addAttribute("statuss", Status.values());
 //		model.addAttribute("userTypes", UserType.values());
-		User user = this.userService.findById(id);
+		User user = this.userService.findByProperty("loginName","bbb").get(0);
+		System.out.println(user.getGroup().getGroupType().toString());
+		/*User user = this.userService.findById(id);
+		System.out.println(user.getGroup().getName());*/
 		List<Group> groupList = this.groupService.findAll();
 		model.addAttribute("user", user);
 		model.addAttribute("groupList",groupList);
@@ -260,9 +265,6 @@ public class UserController {
 		u.setSex(user.getSex());
 		u.setStatus(user.getStatus());
 //		u.setUserType(user.getUserType());
-		u.setSn(user.getSn());
-		u.setSignaturePath(user.getSignaturePath());
-		u.setBakGroupId(user.getBakGroupId());
 		if (user.getGroup() == null || StringUtils.isEmpty(user.getGroup().getId())) {
 			u.setGroup(null);
 		} else {

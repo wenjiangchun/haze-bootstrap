@@ -36,6 +36,7 @@ import java.util.List;
  *
  */
 @Service
+@Transactional
 public class DictionaryService extends AbstractBaseService<Dictionary, String> {
 
 	private DictionaryDao dictionaryDao;

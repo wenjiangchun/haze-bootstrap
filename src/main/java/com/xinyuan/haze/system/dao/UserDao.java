@@ -3,6 +3,7 @@ package com.xinyuan.haze.system.dao;
 import java.util.List;
 
 import com.xinyuan.haze.system.utils.Status;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,6 +25,7 @@ public interface UserDao extends BaseRepository<User, String>, UserRepository {
 	 * @param loginName 登陆名称
 	 * @return 用户对象
 	 */
+	@EntityGraph(value = "User.detail", type = EntityGraph.EntityGraphType.LOAD)
 	User findByLoginName(String loginName);
 	
 	/**
@@ -43,6 +45,6 @@ public interface UserDao extends BaseRepository<User, String>, UserRepository {
 	@Query("update User u set u.password=:password where u.id=:id")
 	User updatePassword(@Param("id") Long id, @Param("password") String password);
 
-    @Query("from User u where u.name like :text or u.group.name like :text and u.status=:status order by u.sn asc,u.group.name asc")
+    @Query("from User u where u.name like :text or u.group.name like :text and u.status=:status order by u.group.name asc")
     List<User> findByUserNameOrGroupName(@Param("text") String text,@Param("status") Status status);
 }

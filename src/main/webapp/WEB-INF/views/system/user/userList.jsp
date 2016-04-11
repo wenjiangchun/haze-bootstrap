@@ -10,7 +10,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		initMenu("viewUser_Menu");
-		initGroupTree();
+		//initGroupTree();
 		initDataTable(); //初始化用户分页列表
 		$("#clearBtn").click(function() { //清空按钮事件
 			$(".databatle_query").val("");
@@ -247,7 +247,6 @@
 							class="table table-striped table-bordered table-condensed table-hover">
 							<thead>
 								<tr>
-									<th sName="sn">顺序号</th>
 									<th sName="loginName" bSortable="true">登录名</th>
 									<th sName="name" bSortable="true">用户名</th>
 									<th sName="mobile" >手机号</th>

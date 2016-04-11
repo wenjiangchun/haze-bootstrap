@@ -1,16 +1,10 @@
 package com.xinyuan.haze.web.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import javax.servlet.http.HttpSession;
-import javax.swing.*;
-
+import com.xinyuan.haze.common.utils.ValidateCodeUtils;
 import com.xinyuan.haze.core.spring.utils.SpringContextUtils;
-import com.xinyuan.haze.soa.camel.spring.SpringCamelContextUtils;
+import com.xinyuan.haze.security.shiro.ValidateCodeAuthenticationFilter;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.xinyuan.haze.common.utils.ValidateCodeUtils;
-import com.xinyuan.haze.security.shiro.ValidateCodeAuthenticationFilter;
+import javax.servlet.http.HttpSession;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 @Controller
 public class LoginController {
@@ -35,10 +30,11 @@ public class LoginController {
 		//SpringContextUtils.loadBeanDefinition("camel/applicationContext-camel.xml");
 		//SpringCamelContextUtils springCamelContextUtils = SpringContextUtils.getBean(SpringCamelContextUtils.class);
 		//springCamelContextUtils.getRouts();
+		SpringContextUtils.loadBeanDefinition("camel/applicationContext-camel.xml");
 		try {
-			SpringCamelContextUtils.addRoute(null);
+			//SpringCamelContextUtils.addRoute(null);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		if (!SecurityUtils.getSubject().isAuthenticated()) {
 			return "login";

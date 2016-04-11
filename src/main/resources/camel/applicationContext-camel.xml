@@ -12,7 +12,12 @@
     <camelContext id="camel5" xmlns="http://camel.apache.org/schema/spring">
         <propertyPlaceholder id="properties" location="camel/camel.properties"/>
         <package>com.xinyuan.haze.demo.camel</package>
-
+        <route id="userService" group="ws">
+            <from uri="servlet:///test"/>
+            <process ref="myProcessor"/>
+            <to uri="http://localhost:8080/haze/cxf/userService?bridgeEndpoint=true"/>
+            <removeHeaders pattern="CamelHttp*"/>
+            <to uri="log:output"/></route>
         <!--<routeBuilder ref="myRouteBuilder" />-->
         <!--<route id="upload">
             <from uri="{{location.path}}?delay=60000&amp;bufferSize=1024&amp;filter=#bossUpLoadFilter&amp;readLockTimeout=30000"/>
@@ -48,4 +53,5 @@
     </bean>-->
     <!--<bean id="myRouteBuilder" class="com.xinyuan.haze.demo.camel.BossFTPRouteBuilder"/>-->
 
+    <bean id="myProcessor" class="com.xinyuan.haze.soa.camel.spring.MyProcessor"/>
 </beans>

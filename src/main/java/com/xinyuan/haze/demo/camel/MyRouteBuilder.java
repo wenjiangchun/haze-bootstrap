@@ -23,6 +23,7 @@ public class MyRouteBuilder extends SpringRouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             try {
+
                 InputStream body = exchange.getIn().getBody(InputStream.class);
                 BufferedReader in = new BufferedReader(new InputStreamReader(body));
                 StringBuffer strbf = new StringBuffer("");

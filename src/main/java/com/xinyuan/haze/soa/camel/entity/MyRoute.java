@@ -23,7 +23,7 @@ import java.util.Date;
  * Created by sofar on 15-10-20.
  */
 @Entity
-@Table(name="CAMEL_MY_ROUTE")
+@Table(name="SOA_ROUTE")
 public class MyRoute extends SimpleBaseEntity<String> {
 
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";

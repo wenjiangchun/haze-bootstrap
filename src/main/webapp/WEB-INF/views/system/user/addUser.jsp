@@ -8,7 +8,6 @@
 <head>
 	<title><fmt:message key="add" /><fmt:message key="user" /></title>
 	<%@ include file="/resources/impForm.jsp"%>
-	<%@ include file="/resources/impUpload.jsp"%>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			initMenu("viewUser_Menu");
@@ -220,27 +219,6 @@
 					</select>
 				</div>
 			</div>
-				  <div class="form-group">
-					  <label for="status" class="col-sm-2 control-label">兼职机构:</label>
-					  <div class="checkbox-inline">
-						  <select name="bakGroupId" class="form-control">
-							  <option></option>
-							  <c:forEach items="${groupList}" var="group">
-								  <option value="${group.id}">${group.fullName}</option>
-							  </c:forEach>
-						  </select>
-					  </div>
-				  </div>
-				  <div class="form-group">
-					  <label class="col-sm-2 control-label">签名图片:</label>
-					  <div class="col-sm-8">
-						  <div id="uploader-demo">
-							  <input type="hidden" name="signaturePath" id="imgPath" required="required"/>
-							  <div id="filePicker"><i class="fa fa-photo"></i> 选择图片</div>
-							  <span id="fileList" class=""></span>
-						  </div>
-					  </div>
-				  </div>
 			</div>
 			</div>
 			<div class="form-group">

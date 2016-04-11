@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.xinyuan.haze.core.jpa.HazeSpecification;
@@ -26,6 +27,7 @@ import com.xinyuan.haze.core.jpa.repository.BaseRepository;
  * @see org.springframework.transaction.annotation.Transactional
  * @see com.xinyuan.haze.core.jpa.service.HazeServiceException
  */
+@Service
 public  abstract class AbstractBaseService<T extends BaseEntity<PK>, PK extends Serializable> {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());

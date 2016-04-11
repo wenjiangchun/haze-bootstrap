@@ -10,6 +10,6 @@
     <import resource="shiro/applicationContext-shiro.xml"/>
     <!--<import resource="activiti/applicationContext-activiti.xml"/>-->
     <import resource="ws/applicationContext-ws.xml"/>
-    <import resource="camel/applicationContext-camel.xml"/>
-    <!--<import resource="activemq/applicationContext-activemq.xml"/>-->
+    <!--<import resource="camel/applicationContext-camel.xml"/>-->
+    <import resource="jms/applicationContext-jms.xml"/>
 </beans>

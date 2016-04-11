@@ -23,6 +23,7 @@
 <routes xmlns="http://camel.apache.org/schema/spring">
     <route id="userService" group="ws">
         <from uri="servlet:///test"/>
+        <process ref="myProcessor"/>
         <to uri="http://localhost:8080/haze/cxf/userService?bridgeEndpoint=true"/>
         <removeHeaders pattern="CamelHttp*"/>
         <to uri="log:output"/></route>

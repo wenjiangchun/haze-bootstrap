@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.xinyuan.haze.core.jpa.entity.SimpleBaseEntity;
 import com.xinyuan.haze.system.utils.Sex;
 import com.xinyuan.haze.system.utils.Status;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
@@ -12,300 +14,247 @@ import java.util.Set;
 
 /**
  * 系统用户信息实体类
- * 
- * @author sofar
  *
+ * @author sofar
  */
 @Entity
-@Table(name="SYS_USER")
-@JsonIgnoreProperties(value={"roles"})
+@Table(name = "SYS_USER")
+@JsonIgnoreProperties(value = {"roles"})
+@NamedEntityGraph(name = "User.detail",
+        attributeNodes = @NamedAttributeNode("group"))
 public class User extends SimpleBaseEntity<String> {
-	
-	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 超级管理员用户登录名。
-	 */
-	public static final String ADMIN = "admin";
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 用户默认密码,当新添加或重置用户时使用该密码。
-	 */
-	public static final String DEFAULT_PASSWORD = "666666";
-	
-	/**
-	 * 登录名
-	 */
-	@Column(unique=true)
-	private String loginName;
+    /**
+     * 超级管理员用户登录名。
+     */
+    public static final String ADMIN = "admin";
 
-	/**
-	 * 姓名
-	 */
-	private String name;
-	
-	/**
-	 * 登录密码
-	 */
-	private String password;
-	
-	private Sex sex;
+    /**
+     * 用户默认密码,当新添加或重置用户时使用该密码。
+     */
+    public static final String DEFAULT_PASSWORD = "666666";
 
-	private String email;
-	
-	private String mobile;
-	
-	private String tel;
-	
-	/**
-	 * 用户状态
-	 */
-	private Status status;
-	
+    /**
+     * 登录名
+     */
 
-	
-	private String salt;
-	
-	/**
-	 * 用户角色组
-	 */
-	private Set<Role> roles = new HashSet<>();
-	
-	private Group group;
+    private String loginName;
 
-	public User() {
-	}
+    /**
+     * 姓名
+     */
+    private String name;
 
-	public String getPassword() {
-		return password;
-	}
+    /**
+     * 登录密码
+     */
+    private String password;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    private Sex sex;
 
-	public Sex getSex() {
-		return sex;
-	}
+    private String email;
 
-	public void setSex(Sex sex) {
-		this.sex = sex;
-	}
+    private String mobile;
 
-	public String getEmail() {
-		return email;
-	}
+    private String tel;
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    /**
+     * 用户状态
+     */
+    private Status status;
 
-	public Status getStatus() {
-		return status;
-	}
 
-	public void setStatus(Status status) {
-		this.status = status;
-	}
+    private String salt;
 
-	public String getLoginName() {
-		return loginName;
-	}
+    /**
+     * 用户角色组
+     */
+    private Set<Role> roles = new HashSet<>();
 
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
-	}
+    private Group group;
 
-	public String getName() {
-		return name;
-	}
+    public User() {
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getSalt() {
-		return salt;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-	
-	
-	public String getMobile() {
-		return mobile;
-	}
+    public Sex getSex() {
+        return sex;
+    }
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
 
-	public String getTel() {
-		return tel;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	@ManyToMany
-	@JoinTable(
-		name="SYS_USER_ROLE"
-		, joinColumns={
-			@JoinColumn(name="USER_ID")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="ROLE_ID")
-			}
-		)
-	public Set<Role> getRoles() {
-		return roles;
-	}
+    public Status getStatus() {
+        return status;
+    }
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-	
-	@ManyToOne
-	@JoinColumn(name="group_id")
-	public Group getGroup() {
-		return group;
-	}
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
-	public void setGroup(Group group) {
-		this.group = group;
-	}
+    @Column(unique = true)
+    public String getLoginName() {
+        return loginName;
+    }
 
-	/**
-	 * 对用户增加角色
-	 * @param role 角色对象
-	 * @return 当前用户所有角色
-	 */
-	public Set<Role> addRole(Role role) {
-	   this.roles.add(role);
-	   return this.roles;
-	}
-	
-	/**
-	 * 删除用户角色
-	 * @param role 角色对象
-	 * @return 当前用户所有角色
-	 */
-	public Set<Role> removeRole(Role role) {
-		this.roles.remove(role);
-		return this.roles;
-	}
-	
-	/**
-	 * 获取用户所有资源权限，包括用户角色所有权限和用户所在机构所有权限
-	 * @return 用户当前所有资源权限
-	 */
-	@Transient
-	public Set<String> getAllPermission() {
-		Set<String> permissions = new HashSet<String>();
-		for(Role role : this.getRoles()) {
-			//增加用户角色下所有资源权限
-			permissions.addAll(role.getAllPermissons());
-		}
-		Group group = this.getGroup();
-		if (group != null) {
-			for (Role role : group.getRoles()) {
-				//增加用户所在机构下所有资源权限
-				permissions.addAll(role.getAllPermissons());
-			}
-		}
-		return permissions;
-	}
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
 
-	/**
-	 * 获取用户所有角色名称 以逗号隔开
-	 * @return 角色名称
-	 */
-	@Transient
-	public String getRoleNames() {
-		String roleName = "";
-		if (roles != null) {
-			for (Role role : roles) {
-				roleName += role.getCode() + ",";
-			}
-		}
-		return roleName;
-	}
-	
-	/**
-	 * 判断用户是否为超级管理员 如果loginName为"admin"则为超级管理员
-	 * @return true/false
-	 */
-	@Transient
-	public boolean isSuperAdmin() {
-		return ADMIN.equals(this.getLoginName());
-	}
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * 住宅电话
-	 */
-	private String hourseTel;
-	
-	/**
-	 * 小号
-	 */
-	private String backupTel;
-	
-	
-	public String getHourseTel() {
-		return hourseTel;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setHourseTel(String hourseTel) {
-		this.hourseTel = hourseTel;
-	}
+    public String getSalt() {
+        return salt;
+    }
 
-	public String getBackupTel() {
-		return backupTel;
-	}
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 
-	public void setBackupTel(String backupTel) {
-		this.backupTel = backupTel;
-	}
 
-	private Integer sn = 0;
+    public String getMobile() {
+        return mobile;
+    }
 
-	public Integer getSn() {
-		return sn;
-	}
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-	public void setSn(Integer sn) {
-		this.sn = sn;
-	}
+    public String getTel() {
+        return tel;
+    }
 
-	@Override
-	public String toString() {
-		String email = this.email != null ? this.email : "";
-		return "User [loginName=" + loginName + ",name=" + name + ",sex=" + sex.getSexName()+",email=" + email + ",status=" + status.getStatusName() + "]";
-	}
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
 
-	
-	/**
-	 * 用户签名图片路径信息
-	 */
-	private String signaturePath;
+    @ManyToMany
+    @JoinTable(
+            name = "SYS_USER_ROLE"
+            , joinColumns = {
+            @JoinColumn(name = "USER_ID")
+    }
+            , inverseJoinColumns = {
+            @JoinColumn(name = "ROLE_ID")
+    }
+    )
+    public Set<Role> getRoles() {
+        return roles;
+    }
 
-	public String getSignaturePath() {
-		return signaturePath;
-	}
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
-	public void setSignaturePath(String signaturePath) {
-		this.signaturePath = signaturePath;
-	}
 
-	public String bakGroupId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "group_id")
+    public Group getGroup() {
+        return group;
+    }
 
-	public String getBakGroupId() {
-		return bakGroupId;
-	}
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 
-	public void setBakGroupId(String bakGroupId) {
-		this.bakGroupId = bakGroupId;
-	}
+    /**
+     * 对用户增加角色
+     *
+     * @param role 角色对象
+     * @return 当前用户所有角色
+     */
+    public Set<Role> addRole(Role role) {
+        this.roles.add(role);
+        return this.roles;
+    }
+
+    /**
+     * 删除用户角色
+     *
+     * @param role 角色对象
+     * @return 当前用户所有角色
+     */
+    public Set<Role> removeRole(Role role) {
+        this.roles.remove(role);
+        return this.roles;
+    }
+
+    /**
+     * 获取用户所有资源权限，包括用户角色所有权限和用户所在机构所有权限
+     *
+     * @return 用户当前所有资源权限
+     */
+    @Transient
+    public Set<String> getAllPermission() {
+        Set<String> permissions = new HashSet<String>();
+        for (Role role : this.getRoles()) {
+            //增加用户角色下所有资源权限
+            permissions.addAll(role.getAllPermissons());
+        }
+        Group group = this.getGroup();
+        if (group != null) {
+            for (Role role : group.getRoles()) {
+                //增加用户所在机构下所有资源权限
+                permissions.addAll(role.getAllPermissons());
+            }
+        }
+        return permissions;
+    }
+
+    /**
+     * 获取用户所有角色名称 以逗号隔开
+     *
+     * @return 角色名称
+     */
+    @Transient
+    public String getRoleNames() {
+        String roleName = "";
+        if (roles != null) {
+            for (Role role : roles) {
+                roleName += role.getCode() + ",";
+            }
+        }
+        return roleName;
+    }
+
+    /**
+     * 判断用户是否为超级管理员 如果loginName为"admin"则为超级管理员
+     *
+     * @return true/false
+     */
+    @Transient
+    public boolean isSuperAdmin() {
+        return ADMIN.equals(this.getLoginName());
+    }
+
+    @Override
+    public String toString() {
+        String email = this.email != null ? this.email : "";
+        return "User [loginName=" + loginName + ",name=" + name + ",sex=" + sex.getSexName() + ",email=" + email + ",status=" + status.getStatusName() + "]";
+    }
+
 }

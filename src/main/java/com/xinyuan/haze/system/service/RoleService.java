@@ -24,7 +24,6 @@ import com.xinyuan.haze.system.utils.Status;
  *
  */
 @Service
-@Transactional(readOnly = true)
 public class RoleService extends AbstractBaseService<Role, String>{
 	
 	private RoleDao roleDao;

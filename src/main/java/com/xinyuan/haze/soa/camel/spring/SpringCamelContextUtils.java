@@ -3,6 +3,8 @@ package com.xinyuan.haze.soa.camel.spring;
 import com.xinyuan.haze.soa.camel.entity.MyRoute;
 import org.apache.camel.*;
 import org.apache.camel.model.RoutesDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
@@ -19,10 +21,13 @@ public class SpringCamelContextUtils implements CamelContextAware, InitializingB
 
     private static CamelContext camelContext;
 
+    private Logger logger = LoggerFactory.getLogger(SpringCamelContextUtils.class);
+
     @Override
     public void setCamelContext(CamelContext camelContext) {
         this.camelContext = camelContext;
         //加载系统路由信息.
+        logger.debug("加载系统路由信息");
     }
 
     @Override
@@ -46,7 +51,6 @@ public class SpringCamelContextUtils implements CamelContextAware, InitializingB
                 e.printStackTrace();
             }
         });
-        System.out.println("0");
         //camelContext.addRouteDefinition(new RouteDefinition());
        /* RouteBuilder rb = new RouteBuilder() {
             @Override
@@ -136,5 +140,6 @@ public class SpringCamelContextUtils implements CamelContextAware, InitializingB
     @Override
     public void afterPropertiesSet() throws Exception {
         //加载系统
+        logger.debug(this.toString()+"初始化完毕");
     }
 }
