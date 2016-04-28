@@ -10,7 +10,7 @@ import java.util.concurrent.RecursiveAction;
  */
 public class MathTransform extends RecursiveAction {
 
-    private final int seqThreshold = 5000;
+    private final int seqThreshold = 5;
 
     private double[] data;
 

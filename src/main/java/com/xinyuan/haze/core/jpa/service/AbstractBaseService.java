@@ -117,11 +117,11 @@ public  abstract class AbstractBaseService<T extends BaseEntity<PK>, PK extends 
 	
 	/**
 	 * 根据查询参数查询所有<T>对象信息
-	 * @param queryVirables 查询参数
+	 * @param queryParams 查询参数
 	 * @return {@code List<T>}
 	 */
-	public List<T> findAll(Map<String, Object> queryVirables) {
-		Specification<T> spec = new HazeSpecification<>(queryVirables);
+	public List<T> findAll(Map<String, Object> queryParams) {
+		Specification<T> spec = new HazeSpecification<>(queryParams);
 		return this.dao.findAll(spec);
 	}
 
@@ -134,4 +134,12 @@ public  abstract class AbstractBaseService<T extends BaseEntity<PK>, PK extends 
     public List<T> findByProperty(String propertyName, Object value, Sort... sorts) {
         return this.dao.findByProperty(propertyName, value, sorts);
     }
+
+	public List<T> findByJql(String jql, Map<String, Object> queryParams) {
+		return this.dao.findByJql(jql, queryParams);
+	}
+
+	public List<T> findBySql(String sql, Map<String, Object> queryParams) {
+		return this.dao.findBySql(sql, queryParams);
+	}
 }

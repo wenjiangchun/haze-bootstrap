@@ -48,18 +48,18 @@ public class ShiroRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		User user = userService.findByLoginName(token.getUsername());
 		if (user == null) {
-                throw new AccountException("用户名不存在!");
+                throw new UnknownAccountException("用户名不存在!");
 
         }
 		Status status = user.getStatus();
 		if (status == Status.D) { //账户禁用
 			throw new DisabledAccountException();
 		}
-        /**else if (status == Status.I) { //账户失效
+        else if (status == Status.I) { //账户失效
 			throw new ExpiredCredentialsException();
-		} else if (status == Status.F) { //账户冻结
+		} else if (status == Status.L) { //账户冻结
 			throw new LockedAccountException();
-		}*/
+		}
 		byte[] salt = EncodeUtils.decodeHex(user.getSalt());
 		return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(),user.getName()),user.getPassword(), ByteSource.Util.bytes(salt),
 				getName());

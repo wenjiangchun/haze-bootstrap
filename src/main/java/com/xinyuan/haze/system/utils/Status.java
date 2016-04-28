@@ -16,7 +16,11 @@ public enum Status {
 	/**
 	 * 禁用
 	 */
-	D("禁用");
+	D("禁用"),
+
+	I("失效"),
+
+	L("锁定");
 	
 	private String statusName;
 

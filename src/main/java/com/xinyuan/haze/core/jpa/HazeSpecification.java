@@ -26,27 +26,27 @@ public class HazeSpecification<T extends BaseEntity<?>> implements Specification
 
 	private static final String SPLIT = "_";
 
-	private Map<String, Object> queryVirables;
+	private Map<String, Object> queryParams;
 	
-	public HazeSpecification(Map<String, Object> queryVirables) {
-		this.queryVirables = queryVirables;
+	public HazeSpecification(Map<String, Object> queryParams) {
+		this.queryParams = queryParams;
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 		Predicate p = null;
-		if (queryVirables != null) {
-			Set<String> keys = queryVirables.keySet();
+		if (queryParams != null) {
+			Set<String> keys = queryParams.keySet();
 			for (String value : keys) {
 				String[] keyAndOperator = getAttributeAndOperator(value);
 				String key = keyAndOperator[0];
-				String operatator = keyAndOperator[1];
-				Object queryValue = queryVirables.get(value);
+				String operator = keyAndOperator[1];
+				Object queryValue = queryParams.get(value);
 				if (HazeStringUtils.isNotEmpty(key)) {
 					Predicate predicate = null;
 					Path expression = null;
-                       if ("or".equalsIgnoreCase(operatator)) {
+                       if ("or".equalsIgnoreCase(operator)) {
 						   Path expression1 = null;
 						   Path expression2 = null;
 						   try {
@@ -85,48 +85,48 @@ public class HazeSpecification<T extends BaseEntity<?>> implements Specification
 							   break;
 						   }
 
-						   if ("eq".equalsIgnoreCase(operatator)) {
+						   if ("eq".equalsIgnoreCase(operator)) {
 							   predicate = cb.equal(expression, queryValue);
-						   } else if ("like".equalsIgnoreCase(operatator)) {
+						   } else if ("like".equalsIgnoreCase(operator)) {
 							   predicate = cb.like(expression, "%" + queryValue + "%");
-						   } else if ("ge".equalsIgnoreCase(operatator)) {
+						   } else if ("ge".equalsIgnoreCase(operator)) {
 							   predicate = cb.ge(expression, (Number)queryValue);
-						   } else if ("le".equalsIgnoreCase(operatator)) {
+						   } else if ("le".equalsIgnoreCase(operator)) {
 							   predicate = cb.le(expression, (Number)queryValue);
-						   } else if ("isNull".equalsIgnoreCase(operatator)) {
+						   } else if ("isNull".equalsIgnoreCase(operator)) {
 							   predicate = cb.isNull(expression);
-						   } else if ("isNotNull".equalsIgnoreCase(operatator)) {
+						   } else if ("isNotNull".equalsIgnoreCase(operator)) {
 							   predicate = cb.isNotNull(expression);
 
-						   } else if ("isEmpty".equalsIgnoreCase(operatator)) {
+						   } else if ("isEmpty".equalsIgnoreCase(operator)) {
 							   predicate = cb.isEmpty(expression);
-						   } else if ("isTrue".equalsIgnoreCase(operatator)) {
+						   } else if ("isTrue".equalsIgnoreCase(operator)) {
 							   predicate = cb.isTrue(expression);
-						   } else if ("isFalse".equalsIgnoreCase(operatator)) {
+						   } else if ("isFalse".equalsIgnoreCase(operator)) {
 							   predicate = cb.isFalse(expression);
-						   } else if ("notEqual".equalsIgnoreCase(operatator)) {
+						   } else if ("notEqual".equalsIgnoreCase(operator)) {
 							   predicate = cb.notEqual(expression, queryValue);
-						   } else if ("in".equalsIgnoreCase(operatator)) {
+						   } else if ("in".equalsIgnoreCase(operator)) {
 							   predicate = expression.in(queryValue);
-						   } else if ("greatThan".equalsIgnoreCase(operatator)){
+						   } else if ("greatThan".equalsIgnoreCase(operator)){
 							   predicate = cb.greaterThan(expression, (Date)queryValue);
-						   } else if ("between".equalsIgnoreCase(operatator)){
+						   } else if ("between".equalsIgnoreCase(operator)){
 							   predicate = cb.between(expression, (Date)queryValue,(Date)queryValue);
 						/*try {
 							predicate = cb.between(expression,HazeDateUtils.parseDate("2013-11-04 00:00:00","yyyy-MM-dd hh:mm:ss"),HazeDateUtils.parseDate("2013-11-04 23:59:59","yyyy-MM-dd hh:mm:ss"));
 						} catch (ParseException e) {
 							e.printStackTrace();
 						}*/
-						   } else if ("or".equalsIgnoreCase(operatator)) {
+						   } else if ("or".equalsIgnoreCase(operator)) {
 							   cb.or(cb.equal(expression, queryValue));
-						   } else if ("desc".equalsIgnoreCase(operatator)){
+						   } else if ("desc".equalsIgnoreCase(operator)){
 							   query.orderBy(cb.desc(expression));
 						/*try {
 							predicate = cb.between(expression,HazeDateUtils.parseDate("2013-11-04 00:00:00","yyyy-MM-dd hh:mm:ss"),HazeDateUtils.parseDate("2013-11-04 23:59:59","yyyy-MM-dd hh:mm:ss"));
 						} catch (ParseException e) {
 							e.printStackTrace();
 						}*/
-						   } else if ("asc".equalsIgnoreCase(operatator)) {
+						   } else if ("asc".equalsIgnoreCase(operator)) {
 							   query.orderBy(cb.asc(expression));
 						   } else {
 							   predicate = cb.equal(expression, queryValue);

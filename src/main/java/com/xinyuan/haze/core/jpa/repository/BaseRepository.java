@@ -2,6 +2,7 @@ package com.xinyuan.haze.core.jpa.repository;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +30,8 @@ public interface BaseRepository<T extends BaseEntity<ID>, ID extends Serializabl
      * @return List<T>     满足查询条件的对象信息列表
      */
     List<T> findByProperty(String propertyName, Object value, Sort... sorts);
+
+    List<T> findByJql(String jpql, Map<String, Object> queryParams);
+
+    List<T> findBySql(String sql, Map<String, Object> queryParams);
 }

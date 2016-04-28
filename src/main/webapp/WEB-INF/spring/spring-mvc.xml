@@ -49,8 +49,8 @@
 		<property name="exceptionMappings">  
 			<props>  
 				<prop key="org.springframework.validation.BindException">error/400</prop>
-				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>  
-            </props>  
+				<prop key="org.apache.shiro.authz.UnauthorizedException">redirect:/</prop>
+            </props>
 		</property>  
     </bean> 
 
@@ -77,6 +77,17 @@
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />  
 
     <bean class="com.xinyuan.haze.core.spring.utils.SpringContextUtils"/>
-    
-      
+
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+	<!-- AOP式方法级权限检查 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"/>
+	</bean>
+
 </beans>

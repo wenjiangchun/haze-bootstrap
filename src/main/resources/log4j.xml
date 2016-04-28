@@ -17,12 +17,15 @@
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework">
-		<level value="debug" />
+		<level value="error" />
 	</logger>
 	
 
 	<logger name="org.hibernate.SQL">
 		<level value="debug" />
+	</logger>
+	<logger name="org.apache.shiro">
+		<level value="debug"/>
 	</logger>
 	<!-- Root Logger -->
 	<root>

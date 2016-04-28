@@ -6,5 +6,5 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <import resource="applicationContext.xml"/>
-    <import resource="jms/applicationContext-jms.xml"/>
+    <import resource="applicationContext-haze.xml"/>
 </beans>

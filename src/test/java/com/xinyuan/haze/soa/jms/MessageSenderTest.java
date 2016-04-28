@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
+
 /**
  * Created by sofar on 15-12-4.
  */
@@ -32,10 +34,13 @@ public class MessageSenderTest {
         //messageSender.receiveMessage();
 
         User user = new User();
-        user.setLoginName("admin");
+        user.setLoginName("zhangsan");
         user.setPassword("666666");
         user.setSex(Sex.M);
         user.setStatus(Status.E);
         userService.saveOrUpdate(user);
+
+        String jql = "from User where name=:name";
+        userService.findByJql(jql, new HashMap<String, Object>());
     }
 }

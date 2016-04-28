@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.servlet.ServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,15 +48,14 @@ public class UserController {
 	
 	@Autowired
 	private GroupService groupService;
-	
+
+	@RequiresRoles("admin")
 	@RequestMapping(value = "view")
 	public String list(Model model, ServletRequest request) {
 		model.addAttribute("statuss", Status.values());
 //		model.addAttribute("userTypes", UserType.values());
 		String selectGroupId = request.getParameter("groupId");
 		model.addAttribute("groupId", selectGroupId);
-		System.out.println("fasdfasd的发");
-		userService.getSay("啊啊啊");
 		return "system/user/userList";
 	}
 	

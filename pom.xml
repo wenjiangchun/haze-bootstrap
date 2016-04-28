@@ -11,11 +11,12 @@
         <spring.version>4.2.5.RELEASE</spring.version>
         <hibernate.version>5.1.0.Final</hibernate.version>
         <hibernate.validator.version>5.2.4.final</hibernate.validator.version>
-        <spring-data-jpa.version>1.9.2.release</spring-data-jpa.version>
+        <spring-data-jpa.version>1.10.1.RELEASE</spring-data-jpa.version>
         <slf4j.version>1.7.14</slf4j.version>
         <activiti.version>5.13</activiti.version>
         <camel.version>2.16.2</camel.version>
         <cxf-version>3.1.2</cxf-version>
+        <shiro.version>1.2.4</shiro.version>
     </properties>
     <dependencies>
         <dependency>
@@ -155,12 +156,17 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
-            <version>1.2.3</version>
+            <version>${shiro.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-ehcache</artifactId>
-            <version>1.2.3</version>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-quartz</artifactId>
+            <version>${shiro.version}</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
