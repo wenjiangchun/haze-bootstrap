@@ -70,12 +70,12 @@ public class DataTablePage {
 	/**
 	 * 根据Page对象和查询参数对象生成DataTable分页对象
 	 * @param page 从数据库查询数据分页对象
-	 * @param dataTableParames 分页参数 主要设置前台传递sEcho值
+	 * @param dataTableParams 分页参数 主要设置前台传递sEcho值
 	 * @return DataTablePage
 	 */
-	public static DataTablePage generateDataTablePage(Page<?> page,DataTableParames dataTableParames) {
+	public static DataTablePage generateDataTablePage(Page<?> page,DataTableParams dataTableParams) {
 		int totalRecords = Integer.parseInt(String.valueOf(page.getTotalElements()));
-        DataTablePage dtp = new DataTablePage(dataTableParames.getsEcho(),totalRecords,totalRecords);
+        DataTablePage dtp = new DataTablePage(dataTableParams.getsEcho(),totalRecords,totalRecords);
         dtp.setAaData(page.getContent());
 		return dtp;
 	}

@@ -25,7 +25,7 @@ import com.xinyuan.haze.system.service.ResourceService;
 import com.xinyuan.haze.system.service.RoleService;
 import com.xinyuan.haze.system.utils.Status;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
-import com.xinyuan.haze.web.ui.datatable.DataTableParames;
+import com.xinyuan.haze.web.ui.datatable.DataTableParams;
 import com.xinyuan.haze.web.utils.WebMessage;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -52,15 +52,15 @@ public class RoleController {
 	
 	@RequestMapping(value = "search")
 	@ResponseBody
-	public DataTablePage search(DataTableParames dataTableParames,ServletRequest request) {
-		PageRequest p = dataTableParames.getPageRequest();
-		Map<String, Object> queryVaribles = dataTableParames.getQueryVairables();
+	public DataTablePage search(DataTableParams dataTableParams, ServletRequest request) {
+		PageRequest p = dataTableParams.getPageRequest();
+		Map<String, Object> queryVaribles = dataTableParams.getQueryVairables();
 		if (queryVaribles != null && queryVaribles.get("status") != null) {
 			String value = (String) queryVaribles.get("status");
 			queryVaribles.put("status", Status.valueOf(value));
 		}
-		Page<Role> roleList = this.roleService.findPage(p,dataTableParames.getQueryVairables());
-		DataTablePage dtp = DataTablePage.generateDataTablePage(roleList, dataTableParames);
+		Page<Role> roleList = this.roleService.findPage(p, dataTableParams.getQueryVairables());
+		DataTablePage dtp = DataTablePage.generateDataTablePage(roleList, dataTableParams);
 		return dtp;
 	}
 

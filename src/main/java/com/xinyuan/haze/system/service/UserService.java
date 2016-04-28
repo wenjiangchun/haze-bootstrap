@@ -43,6 +43,7 @@ public class UserService extends AbstractBaseService<User, String> {
 	
 	@Autowired
 	public void setUserDao(UserDao userDao) {
+		Assert.notNull(userDao, "userDao不能为null!");
 		this.userDao = userDao;
 		super.setDao(userDao);
 	}

@@ -1,10 +1,8 @@
 package com.xinyuan.haze.system.web.controller;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -26,7 +24,7 @@ import com.xinyuan.haze.system.entity.Resource;
 import com.xinyuan.haze.system.service.ResourceService;
 import com.xinyuan.haze.system.utils.ResourceType;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
-import com.xinyuan.haze.web.ui.datatable.DataTableParames;
+import com.xinyuan.haze.web.ui.datatable.DataTableParams;
 import com.xinyuan.haze.web.utils.WebMessage;
 
 /**
@@ -49,15 +47,15 @@ public class ResourceController {
 	
 	@RequestMapping(value = "search")
 	@ResponseBody
-	public DataTablePage search(DataTableParames dataTableParames,ServletRequest request) {
-		PageRequest p = dataTableParames.getPageRequest();
-		Map<String, Object> queryVaribles = dataTableParames.getQueryVairables();
+	public DataTablePage search(DataTableParams dataTableParams, ServletRequest request) {
+		PageRequest p = dataTableParams.getPageRequest();
+		Map<String, Object> queryVaribles = dataTableParams.getQueryVairables();
 		if (queryVaribles != null && queryVaribles.get("resourceType") != null) {
 			String value = (String) queryVaribles.get("resourceType");
 			queryVaribles.put("resourceType",ResourceType.valueOf(value));
 		}
-		Page<Resource> resourceList = this.resourceService.findPage(p,dataTableParames.getQueryVairables());
-		DataTablePage dtp = DataTablePage.generateDataTablePage(resourceList, dataTableParames);
+		Page<Resource> resourceList = this.resourceService.findPage(p, dataTableParams.getQueryVairables());
+		DataTablePage dtp = DataTablePage.generateDataTablePage(resourceList, dataTableParams);
 		return dtp;
 	}
 	@RequestMapping(value = "add", method = RequestMethod.GET)

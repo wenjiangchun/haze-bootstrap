@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataTableParames {
+public class DataTableParams {
 
 	private String sEcho ;
 

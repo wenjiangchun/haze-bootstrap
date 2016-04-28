@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="alarmProcess" name="警情处理流程" isExecutable="true">
+    <startEvent id="startevent1" name="Start" activiti:initiator="assignUser"></startEvent>
+    <userTask id="countyAlarmReceive" name="县级接警平台" activiti:candidateGroups="${alarmGroup}">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${taskCompleteListener}"></activiti:taskListener>
+        <activiti:taskListener event="assignment" delegateExpression="${taskAssignmentListener}"></activiti:taskListener>
+        <activiti:taskListener event="create" delegateExpression="${taskCreateListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <userTask id="alarmHandle" name="正常办理" activiti:assignee="${handleUser}">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${taskHandleListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <userTask id="exceptionReport" name="异常上报" activiti:assignee="${reportGroup}">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${exceptionReportListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow5" name="确认异常" sourceRef="exclusivegateway1" targetRef="exceptionReport">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${handleBranch==3}]]></conditionExpression>
+    </sequenceFlow>
+    <boundaryEvent id="confirmBoundaryTimer" name="Timer" attachedToRef="countyAlarmReceive" cancelActivity="true">
+      <timerEventDefinition>
+        <timeDuration>${confirmTime}</timeDuration>
+      </timerEventDefinition>
+    </boundaryEvent>
+    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow12" sourceRef="exceptionReport" targetRef="exclusivegateway2"></sequenceFlow>
+    <sequenceFlow id="flow13" name="继续办理" sourceRef="exclusivegateway2" targetRef="alarmHandle">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isPass}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="cityAlarmReceive" name="市级接警平台" activiti:candidateGroups="${alarmGroup}">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${taskCompleteListener}"></activiti:taskListener>
+        <activiti:taskListener event="create" delegateExpression="${taskCreateListener}"></activiti:taskListener>
+        <activiti:taskListener event="assignment" delegateExpression="${taskAssignmentListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow18" sourceRef="startevent1" targetRef="exclusivegateway4"></sequenceFlow>
+    <sequenceFlow id="flow19" name="三级接警平台" sourceRef="exclusivegateway4" targetRef="countyAlarmReceive">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${groupLevel==3}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow20" name="二级接警平台" sourceRef="exclusivegateway4" targetRef="cityAlarmReceive">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${groupLevel==2}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow21" sourceRef="cityAlarmReceive" targetRef="exclusivegateway1"></sequenceFlow>
+    <sequenceFlow id="flow24" name="转发其它单位" sourceRef="exclusivegateway1" targetRef="exclusivegateway4">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${handleBranch==2}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent2" name="End"></endEvent>
+    <sequenceFlow id="flow27" sourceRef="confirmBoundaryTimer" targetRef="cityAlarmReceive">
+      <extensionElements>
+        <activiti:executionListener event="take" delegateExpression="${timerBoundaryListener}"></activiti:executionListener>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="flow28" sourceRef="countyAlarmReceive" targetRef="exclusivegateway1"></sequenceFlow>
+    <endEvent id="endevent3" name="End"></endEvent>
+    <sequenceFlow id="flow29" name="直接办理" sourceRef="exclusivegateway1" targetRef="endevent3">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${handleBranch==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow30" name="允许退回" sourceRef="exclusivegateway2" targetRef="endevent2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow31" sourceRef="alarmHandle" targetRef="exclusivegateway1"></sequenceFlow>
+    <endEvent id="endevent4" name="End"></endEvent>
+    <sequenceFlow id="flow32" name="警情作废" sourceRef="exclusivegateway1" targetRef="endevent4">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${handleBranch==4}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_alarmProcess">
+    <bpmndi:BPMNPlane bpmnElement="alarmProcess" id="BPMNPlane_alarmProcess">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="0.0" y="243.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="350.0" y="249.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="770.0" y="252.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="625.0" y="249.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway4" id="BPMNShape_exclusivegateway4">
+        <omgdc:Bounds height="40.0" width="40.0" x="50.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="alarmHandle" id="BPMNShape_alarmHandle">
+        <omgdc:Bounds height="55.0" width="105.0" x="593.0" y="144.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent3" id="BPMNShape_endevent3">
+        <omgdc:Bounds height="35.0" width="35.0" x="353.0" y="350.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="confirmBoundaryTimer" id="BPMNShape_confirmBoundaryTimer">
+        <omgdc:Bounds height="30.0" width="30.0" x="190.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exceptionReport" id="BPMNShape_exceptionReport">
+        <omgdc:Bounds height="55.0" width="105.0" x="461.0" y="242.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cityAlarmReceive" id="BPMNShape_cityAlarmReceive">
+        <omgdc:Bounds height="55.0" width="105.0" x="152.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="countyAlarmReceive" id="BPMNShape_countyAlarmReceive">
+        <omgdc:Bounds height="55.0" width="105.0" x="152.0" y="144.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent4" id="BPMNShape_endevent4">
+        <omgdc:Bounds height="35.0" width="35.0" x="439.0" y="350.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="390.0" y="269.0"></omgdi:waypoint>
+        <omgdi:waypoint x="461.0" y="269.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="-25.0" y="-15.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="566.0" y="269.0"></omgdi:waypoint>
+        <omgdi:waypoint x="625.0" y="269.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="645.0" y="249.0"></omgdi:waypoint>
+        <omgdi:waypoint x="645.0" y="199.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="-15.0" y="-13.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="35.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="50.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="70.0" y="240.0"></omgdi:waypoint>
+        <omgdi:waypoint x="70.0" y="171.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="171.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="-60.0" y="27.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="70.0" y="280.0"></omgdi:waypoint>
+        <omgdi:waypoint x="70.0" y="388.0"></omgdi:waypoint>
+        <omgdi:waypoint x="152.0" y="387.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="-60.0" y="-54.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="204.0" y="360.0"></omgdi:waypoint>
+        <omgdi:waypoint x="370.0" y="289.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="370.0" y="249.0"></omgdi:waypoint>
+        <omgdi:waypoint x="370.0" y="121.0"></omgdi:waypoint>
+        <omgdi:waypoint x="70.0" y="121.0"></omgdi:waypoint>
+        <omgdi:waypoint x="70.0" y="240.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="276.0" y="-1.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
+        <omgdi:waypoint x="205.0" y="220.0"></omgdi:waypoint>
+        <omgdi:waypoint x="204.0" y="360.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow28" id="BPMNEdge_flow28">
+        <omgdi:waypoint x="204.0" y="199.0"></omgdi:waypoint>
+        <omgdi:waypoint x="370.0" y="249.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow29" id="BPMNEdge_flow29">
+        <omgdi:waypoint x="370.0" y="289.0"></omgdi:waypoint>
+        <omgdi:waypoint x="370.0" y="350.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="-23.0" y="-11.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow30" id="BPMNEdge_flow30">
+        <omgdi:waypoint x="665.0" y="269.0"></omgdi:waypoint>
+        <omgdi:waypoint x="770.0" y="269.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="-20.0" y="-15.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="645.0" y="199.0"></omgdi:waypoint>
+        <omgdi:waypoint x="370.0" y="249.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow32" id="BPMNEdge_flow32">
+        <omgdi:waypoint x="370.0" y="289.0"></omgdi:waypoint>
+        <omgdi:waypoint x="456.0" y="350.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="0.0" y="-11.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

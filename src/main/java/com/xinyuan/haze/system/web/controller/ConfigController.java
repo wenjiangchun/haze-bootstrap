@@ -21,7 +21,7 @@ import com.xinyuan.haze.system.entity.Config;
 import com.xinyuan.haze.system.service.ConfigService;
 import com.xinyuan.haze.system.utils.ConfigType;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
-import com.xinyuan.haze.web.ui.datatable.DataTableParames;
+import com.xinyuan.haze.web.ui.datatable.DataTableParams;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 /**
@@ -45,15 +45,15 @@ public class ConfigController {
 	
 	@RequestMapping(value = "search")
 	@ResponseBody
-	public DataTablePage search(DataTableParames dataTableParames,ServletRequest request) {
-		PageRequest p = dataTableParames.getPageRequest();
-		Map<String, Object> queryVaribles = dataTableParames.getQueryVairables();
+	public DataTablePage search(DataTableParams dataTableParams, ServletRequest request) {
+		PageRequest p = dataTableParams.getPageRequest();
+		Map<String, Object> queryVaribles = dataTableParams.getQueryVairables();
 		if (queryVaribles != null && queryVaribles.get("configType") != null) {
 			String value = (String) queryVaribles.get("configType");
 			queryVaribles.put("configType", ConfigType.valueOf(value));
 		}
-		Page<Config> configList = this.configService.findPage(p,dataTableParames.getQueryVairables());
-		DataTablePage dtp = DataTablePage.generateDataTablePage(configList, dataTableParames);		
+		Page<Config> configList = this.configService.findPage(p, dataTableParams.getQueryVairables());
+		DataTablePage dtp = DataTablePage.generateDataTablePage(configList, dataTableParams);
 		return dtp;
 	}
 	

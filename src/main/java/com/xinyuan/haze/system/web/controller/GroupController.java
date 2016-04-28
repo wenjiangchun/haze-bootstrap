@@ -10,8 +10,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import com.xinyuan.haze.HazeUtils;
-import com.xinyuan.haze.common.utils.HazeDateUtils;
-import com.xinyuan.haze.security.shiro.CannotAnonymousAccessException;
 import com.xinyuan.haze.system.service.UserService;
 import com.xinyuan.haze.web.utils.TreeNode;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +30,7 @@ import com.xinyuan.haze.system.entity.Group;
 import com.xinyuan.haze.system.service.DictionaryService;
 import com.xinyuan.haze.system.service.GroupService;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
-import com.xinyuan.haze.web.ui.datatable.DataTableParames;
+import com.xinyuan.haze.web.ui.datatable.DataTableParams;
 import com.xinyuan.haze.web.utils.WebMessage;
 
 /**
@@ -66,9 +64,9 @@ public class GroupController {
 	
 	@RequestMapping(value = "search")
 	@ResponseBody
-	public DataTablePage search(DataTableParames dataTableParames,ServletRequest request) {
-		PageRequest p = dataTableParames.getPageRequest(); //根据dataTableParames对象获取JPA分页查询使用的PageRequest对象
-		Map<String, Object> map = dataTableParames.getQueryVairables();
+	public DataTablePage search(DataTableParams dataTableParams, ServletRequest request) {
+		PageRequest p = dataTableParams.getPageRequest(); //根据dataTableParames对象获取JPA分页查询使用的PageRequest对象
+		Map<String, Object> map = dataTableParams.getQueryVairables();
 		if(map != null && map.get("parent") != null){
 			Group g = new Group();
 			g.setId((String) map.get("parent"));
@@ -80,8 +78,8 @@ public class GroupController {
 			String value = (String) map.get("groupType.id");
 			map.put("groupType.id", Long.valueOf(value));
 		}
-		Page<Group> groupList = this.groupService.findPage(p,dataTableParames.getQueryVairables()); 
-		DataTablePage dtp = DataTablePage.generateDataTablePage(groupList, dataTableParames); //将查询结果封装成前台使用的DataTablePage对象
+		Page<Group> groupList = this.groupService.findPage(p, dataTableParams.getQueryVairables());
+		DataTablePage dtp = DataTablePage.generateDataTablePage(groupList, dataTableParams); //将查询结果封装成前台使用的DataTablePage对象
 		return dtp;
 	}
 	

@@ -28,7 +28,7 @@ import com.xinyuan.haze.system.service.UserService;
 import com.xinyuan.haze.system.utils.Sex;
 import com.xinyuan.haze.system.utils.Status;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
-import com.xinyuan.haze.web.ui.datatable.DataTableParames;
+import com.xinyuan.haze.web.ui.datatable.DataTableParams;
 import com.xinyuan.haze.web.utils.WebMessage;
 
 /**
@@ -61,15 +61,15 @@ public class UserController {
 	
 	/**
 	 * 根据查询参数查询用户列表分页对象
-	 * @param dataTableParames 包含分页对象和自定义查询对象的参数,其中PageSize
+	 * @param dataTableParams 包含分页对象和自定义查询对象的参数,其中PageSize
 	 * @param request
 	 * @return DataTablePage 前台DataTable组件使用的分页数据对象
 	 */
 	@RequestMapping(value = "search")
     @ResponseBody
-	public DataTablePage search(DataTableParames dataTableParames,ServletRequest request) {
-		PageRequest p = dataTableParames.getPageRequest(); //根据dataTableParames对象获取JPA分页查询使用的PageRequest对象
-		Map<String, Object> queryVairables = dataTableParames.getQueryVairables(); //获取自定义查询参数
+	public DataTablePage search(DataTableParams dataTableParams, ServletRequest request) {
+		PageRequest p = dataTableParams.getPageRequest(); //根据dataTableParames对象获取JPA分页查询使用的PageRequest对象
+		Map<String, Object> queryVairables = dataTableParams.getQueryVairables(); //获取自定义查询参数
 		if (queryVairables != null && queryVairables.get("status") != null) {
 			String value = (String) queryVairables.get("status");
             //将传递进来的status字符串转化为Status枚举对象
@@ -87,7 +87,7 @@ public class UserController {
 		}
 
 		Page<User> userList = this.userService.findPage(p, queryVairables, false); //过滤掉"admin"对象
-		DataTablePage dtp = DataTablePage.generateDataTablePage(userList, dataTableParames); //将查询结果封装成前台使用的DataTablePage对象
+		DataTablePage dtp = DataTablePage.generateDataTablePage(userList, dataTableParams); //将查询结果封装成前台使用的DataTablePage对象
 		return dtp;
 	}
 

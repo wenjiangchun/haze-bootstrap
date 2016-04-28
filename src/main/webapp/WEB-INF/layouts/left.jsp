@@ -141,7 +141,7 @@
 
 			<ul class="submenu">
 				<li class="">
-					<a href="${ctx}/oa/workflow/processDefinition/view/" id="viewProcessDefinition_Menu">
+					<a href="${ctx}/workflow/processDefinition/view/" id="viewProcessDefinition_Menu">
 						<i class="menu-icon fa fa-caret-right"></i>
 						流程定义
 					</a>
@@ -150,7 +150,7 @@
 				</li>
 
 				<li class="">
-					<a href="${ctx}/oa/workflow/processInstance/view/" id="viewProcessInstance_Menu">
+					<a href="${ctx}/workflow/processInstance/view/" id="viewProcessInstance_Menu">
 						<i class="menu-icon fa fa-caret-right"></i>
 						流程实例
 					</a>

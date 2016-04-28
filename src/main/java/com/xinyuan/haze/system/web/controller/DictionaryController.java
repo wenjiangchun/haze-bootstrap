@@ -25,7 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.xinyuan.haze.system.entity.Dictionary;
 import com.xinyuan.haze.system.service.DictionaryService;
 import com.xinyuan.haze.web.ui.datatable.DataTablePage;
-import com.xinyuan.haze.web.ui.datatable.DataTableParames;
+import com.xinyuan.haze.web.ui.datatable.DataTableParams;
 import com.xinyuan.haze.web.utils.WebMessage;
 
 
@@ -52,9 +52,9 @@ public class DictionaryController {
 	
 	@RequestMapping(value = "search")
 	@ResponseBody
-	public DataTablePage search(DataTableParames dataTableParames,ServletRequest request) {
-		PageRequest p = dataTableParames.getPageRequest(); //根据dataTableParames对象获取JPA分页查询使用的PageRequest对象
-		Map<String, Object> map = dataTableParames.getQueryVairables();
+	public DataTablePage search(DataTableParams dataTableParams, ServletRequest request) {
+		PageRequest p = dataTableParams.getPageRequest(); //根据dataTableParames对象获取JPA分页查询使用的PageRequest对象
+		Map<String, Object> map = dataTableParams.getQueryVairables();
 		if(map.get("parent") != null){ //查询parent字典下面的所有子字典列表
 			Dictionary d = new Dictionary();
 			d.setId((String) map.get("parent"));
@@ -67,7 +67,7 @@ public class DictionaryController {
 			map.put("isEnabled", Boolean.valueOf(value));
 		}
 		Page<Dictionary> dictionaryList = this.dictionaryService.findPage(p,map); 
-		DataTablePage dtp = DataTablePage.generateDataTablePage(dictionaryList, dataTableParames); //将查询结果封装成前台使用的DataTablePage对象
+		DataTablePage dtp = DataTablePage.generateDataTablePage(dictionaryList, dataTableParams); //将查询结果封装成前台使用的DataTablePage对象
 		return dtp;
 	}
 	
