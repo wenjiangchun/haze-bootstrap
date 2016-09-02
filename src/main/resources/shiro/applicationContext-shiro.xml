@@ -77,7 +77,6 @@
                 /index = authc
                 /validateCode = anon
                 /cxf/** = anon
-                /** = authc
             </value>
         </property>
     </bean>

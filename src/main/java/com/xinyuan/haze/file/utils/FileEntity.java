@@ -1,12 +1,12 @@
 package com.xinyuan.haze.file.utils;
 
-import org.apache.commons.io.FileSystemUtils;
-import org.apache.commons.io.FilenameUtils;
-
 import java.io.IOException;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 文件实体类

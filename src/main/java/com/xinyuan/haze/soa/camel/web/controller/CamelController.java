@@ -28,7 +28,6 @@ public class CamelController {
 	
 	@RequestMapping(value = "view")
 	public String list(Model model, ServletRequest request) {
-
 		return "soa/camel/camelList";
 	}
 	

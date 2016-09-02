@@ -31,8 +31,8 @@ import com.xinyuan.haze.web.utils.AlertType;
  *
  */
 @Controller
-@RequestMapping(value = "/schedule/trigger")
-public class QrtzTriggerController {
+@RequestMapping(value = "/quartz/trigger")
+public class TriggerController {
 
 	@Autowired
 	private QrtzJobDetailService jobDetailService;

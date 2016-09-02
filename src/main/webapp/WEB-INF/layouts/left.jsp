@@ -160,6 +160,35 @@
 			</ul>
 		</li>
 
+		<li class="">
+			<a href="#" class="dropdown-toggle">
+				<i class="menu-icon fa fa-exchange"></i>
+				<span class="menu-text"> 任务管理 </span>
+				<b class="arrow fa fa-angle-down"></b>
+			</a>
+
+			<b class="arrow"></b>
+
+			<ul class="submenu">
+				<li class="">
+					<a href="${ctx}/quartz/jobDetail/view/" id="viewJobDetail_Menu">
+						<i class="menu-icon fa fa-caret-right"></i>
+						作业管理
+					</a>
+
+					<b class="arrow"></b>
+				</li>
+
+				<li class="">
+					<a href="${ctx}/schedule/trigger/view/" id="viewTrigger_Menu">
+						<i class="menu-icon fa fa-caret-right"></i>
+						触发器管理
+					</a>
+					<b class="arrow"></b>
+				</li>
+			</ul>
+		</li>
+
 
 		<li class="">
 			<a href="#" class="dropdown-toggle">

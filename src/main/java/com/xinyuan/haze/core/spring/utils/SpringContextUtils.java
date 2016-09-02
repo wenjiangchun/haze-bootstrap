@@ -9,8 +9,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -101,5 +103,16 @@ public final class SpringContextUtils implements ApplicationContextAware {
         ClassPathResource resource = new ClassPathResource(resourcePath);
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(defaultListableBeanFactory);
         reader.loadBeanDefinitions(resource);
+    }
+
+    /**
+     * 根据资源路径获取类路径下资源文件信息 比如当前已加载类文件信息
+     *
+     * @param resourcePathPattern
+     * @return
+     * @throws IOException
+     */
+    public static Resource[] getResources(String resourcePathPattern) throws IOException {
+        return ctx.getResources(resourcePathPattern);
     }
 }

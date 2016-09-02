@@ -67,7 +67,7 @@ public class SpringCamelContextUtils implements CamelContextAware, InitializingB
 
         HelloWord helloWord = (HelloWord) hello.newInstance();
         System.out.println(helloWord.hello("aaa"));
-        //ClassUtils.getDefaultClassLoader().
+        //HazeClassUtils.getDefaultClassLoader().
         RoutesDefinition routesDefinition = camelContext.loadRoutesDefinition(is);
         routesDefinition.getRoutes().forEach(d -> {
             try {
@@ -108,8 +108,8 @@ public class SpringCamelContextUtils implements CamelContextAware, InitializingB
         if (!element.getName().equalsIgnoreCase("route")) {
             throw  new Exception("解析错误");
         }*//*
-        InputStream is = ClassUtils.getDefaultClassLoader().getResourceAsStream("camel/config.xml");
-        //ClassUtils.getDefaultClassLoader().
+        InputStream is = HazeClassUtils.getDefaultClassLoader().getResourceAsStream("camel/config.xml");
+        //HazeClassUtils.getDefaultClassLoader().
         camelContext.loadRoutesDefinition(is);*/
         /*camelContext.addRoutes(new RouteBuilder() {
             @Override

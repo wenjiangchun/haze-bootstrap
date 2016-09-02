@@ -23,7 +23,7 @@
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
-		<property name="packagesToScan" value="com.xinyuan"/>
+		<property name="packagesToScan" ref="${scanner.packageName}"/>
 		<property name="jpaDialect" ref="jpaDialect"/>
 		<property name="jpaProperties">
 			<props>
@@ -55,19 +55,50 @@
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
 	<!-- 定义aspectj -->
-	<aop:aspectj-autoproxy proxy-target-class="true">
-		<aop:include name="xm"/>
-	</aop:aspectj-autoproxy>
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- production环境 -->
     <beans profile="production,development">
 		<context:property-placeholder ignore-resource-not-found="true"
 									  location="classpath*:/application.properties" />
-        <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
             <property name="driverClass" value="${jdbc.driver}" />
             <property name="jdbcUrl" value="${jdbc.url}" />
             <property name="user" value="${jdbc.username}" />
             <property name="password" value="${jdbc.password}" />
+        </bean>-->
+		<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+
+			<!--<property name="filters" value="stat" />-->
+            <property name="filters" value="log4j" />
+            <property name="proxyFilters">
+                <list>
+                    <ref bean="stat-filter" />
+                </list>
+            </property>
+
+			<property name="maxActive" value="20" />
+			<property name="initialSize" value="1" />
+			<property name="maxWait" value="60000" />
+			<property name="minIdle" value="1" />
+
+			<property name="timeBetweenEvictionRunsMillis" value="60000" />
+			<property name="minEvictableIdleTimeMillis" value="300000" />
+            <property name="validationQuery" value="select count(*) from sys_user"/>
+			<property name="testWhileIdle" value="true" />
+			<property name="testOnBorrow" value="false" />
+			<property name="testOnReturn" value="false" />
+
+			<property name="poolPreparedStatements" value="false" />
+			<property name="maxOpenPreparedStatements" value="20" />
+            <!--<property name="connectionProperties" value="druid.stat.slowSqlMillis=2000" />-->
+		</bean>
+        <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+            <property name="slowSqlMillis" value="10000" />
+            <property name="logSlowSql" value="true" />
         </bean>
     </beans>
 

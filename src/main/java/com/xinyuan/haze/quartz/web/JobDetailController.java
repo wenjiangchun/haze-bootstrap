@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.servlet.ServletRequest;
 
+import com.xinyuan.haze.common.utils.HazeClassUtils;
 import com.xinyuan.haze.web.utils.WebMessage;
+import org.quartz.Job;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +46,13 @@ public class JobDetailController {
 	
 	@RequestMapping(value = "add", method = RequestMethod.GET)
 	public String add(Model model, ServletRequest request) {
+		//获取所有Job的子类
+		try {
+			List<String> jobClassNames = HazeClassUtils.getSubclassNames(Job.class, "com.xinyuan");
+			model.addAttribute("jobClassNames", jobClassNames);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "schedule/jobDetail/addJobDetail";
 	}
 	

@@ -17,7 +17,7 @@
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework">
-		<level value="error" />
+		<level value="debug" />
 	</logger>
 	
 
@@ -25,7 +25,7 @@
 		<level value="debug" />
 	</logger>
 	<logger name="org.apache.shiro">
-		<level value="debug"/>
+		<level value="error"/>
 	</logger>
 	<!-- Root Logger -->
 	<root>
