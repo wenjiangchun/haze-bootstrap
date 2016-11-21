@@ -43,6 +43,7 @@ public class QrtzTrigger implements BaseEntity<QrtzTriggerPK> {
 	public QrtzTrigger() {
 	}
 
+	@SuppressWarnings("JpaAttributeTypeInspection")
 	@EmbeddedId
 	@Override
 	public QrtzTriggerPK getId() {

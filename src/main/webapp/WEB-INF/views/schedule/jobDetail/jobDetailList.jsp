@@ -35,44 +35,69 @@
         <fmt:message key="${message.content}" />
     </div>
 </c:if>
-<div class="box">
-    <div data-original-title="" class="box-header">
-        <h2>
-            <i class="icon-table"></i><span class="break"></span><a><fmt:message key="jobDetail"/><fmt:message key="list" /></a>
-        </h2>
-        <div class="box-icon">
+<div class="page-content">
+    <div class="hr hr-18 hr-dotted"></div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-group"></i> <fmt:message key="jobDetail"/><fmt:message key="list" /></h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-inline" role="form">
+                            <input type="hidden" name="group.id" id="groupId" class="databatle_query" value="${groupId}"/>
+                            <div style="width:100%">
+                                <label class="" for="status" style="margin-left:5px;">状　　态：</label>
+                                <select id="status" name="status" class="databatle_query input-large">
+                                    <option value=""></option>
+                                    <c:forEach items="${statuss}" var="status">
+                                        <option value="${status}">${status.statusName}</option>
+                                    </c:forEach>
+                                </select>
+
+                                <button type="button" class="btn btn-sm btn-danger" onclick="" style="margin-left:10px;">清空</button>
+                                <button type="button" class="btn btn-sm btn-primary" onclick="refreshTable();" style="margin-left:5px;">
+                                    <i class="fa fa-search"></i> 查询
+                                </button>
+                            </div>
+                        </form>
+                        <div class="hr hr-18 hr-dotted"></div>
+                        <table id="contentTable" class="table table-striped table-bordered table-condensed table-hover">
+                            <thead>
+                            <tr>
+                                <th><fmt:message key="jobDetail.jobGroup"/></th>
+                                <th><fmt:message key="jobDetail.jobName"/></th>
+                                <th><fmt:message key="jobDetail.jobClassName"/></th>
+                                <th><fmt:message key="jobDetail.isDurable"/></th>
+                                <th><fmt:message key="operate"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${list}" var="jobDetail">
+                                <tr>
+                                    <td>${jobDetail.id.jobGroup}</td>
+                                    <td>${jobDetail.id.jobName}</td>
+                                    <td>${jobDetail.jobClassName}</td>
+                                    <td>
+                                        <c:if test="${jobDetail.isDurable}">是</c:if>
+                                        <c:if test="${!jobDetail.isDurable}">否</c:if>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-link" href="${ctx}/schedule/jobDetail/resume/${jobDetail.id.jobGroup}/${jobDetail.id.jobName}" title="<fmt:message key="resume"/>"><i class="icon-play"></i></a>
+                                        <a class="btn btn-link" href="${ctx}/schedule/jobDetail/pause/${jobDetail.id.jobGroup}/${jobDetail.id.jobName}" title="<fmt:message key="pause"/>"><i class="icon-pause"></i></a>
+                                        <a class="btn btn-link" href="${ctx}/schedule/jobDetail/delete/${jobDetail.id.jobGroup}/${jobDetail.id.jobName}" title="<fmt:message key="delete"/>"><i class="icon-trash"></i></a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-primary" id="add_btn"><fmt:message key="add"/><fmt:message key="jobDetail"/></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <table id="contentTable" class="table table-striped table-bordered table-condensed table-hover">
-        <thead>
-        <tr>
-            <th><fmt:message key="jobDetail.jobGroup"/></th>
-            <th><fmt:message key="jobDetail.jobName"/></th>
-            <th><fmt:message key="jobDetail.jobClassName"/></th>
-            <th><fmt:message key="jobDetail.isDurable"/></th>
-            <th><fmt:message key="operate"/></th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${list}" var="jobDetail">
-            <tr>
-                <td>${jobDetail.id.jobGroup}</td>
-                <td>${jobDetail.id.jobName}</td>
-                <td>${jobDetail.jobClassName}</td>
-                <td>
-                    <c:if test="${jobDetail.isDurable}">是</c:if>
-                    <c:if test="${!jobDetail.isDurable}">否</c:if>
-                </td>
-                <td>
-                    <a class="btn btn-link" href="${ctx}/schedule/jobDetail/resume/${jobDetail.id.jobGroup}/${jobDetail.id.jobName}" title="<fmt:message key="resume"/>"><i class="icon-play"></i></a>
-                    <a class="btn btn-link" href="${ctx}/schedule/jobDetail/pause/${jobDetail.id.jobGroup}/${jobDetail.id.jobName}" title="<fmt:message key="pause"/>"><i class="icon-pause"></i></a>
-                    <a class="btn btn-link" href="${ctx}/schedule/jobDetail/delete/${jobDetail.id.jobGroup}/${jobDetail.id.jobName}" title="<fmt:message key="delete"/>"><i class="icon-trash"></i></a>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
 </div>
-<button type="button" class="btn btn-primary" id="add_btn"><fmt:message key="add"/><fmt:message key="jobDetail"/></button>
 </body>
 </html>
