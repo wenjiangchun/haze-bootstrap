@@ -64,7 +64,7 @@ public class UserService extends AbstractBaseService<User, String> {
 	 * @return 保存或更新后的用户对象
 	 * @throws Exception 如果登录名称已存在则抛出该异常
 	 */
-	@Transactional(readOnly=false)
+	@Transactional
 	public User saveOrUpdate(User user) throws Exception {
 		Assert.notNull(user);
 		if (user.isNew()) {
@@ -95,7 +95,6 @@ public class UserService extends AbstractBaseService<User, String> {
 	 * 对用户赋角色权限，同时更新权限缓存中用户信息
 	 * @param id 用户Id
 	 * @param role 角色对象
-     * @throws Exception 
 	 */
 	@CacheEvict(value="shiroCache",allEntries=true)
 	@Transactional(readOnly = false)
@@ -168,7 +167,7 @@ public class UserService extends AbstractBaseService<User, String> {
 	 */
 	@Transactional(readOnly = false)
 	public User disableUser(String id) throws Exception {
-		return changeStatus(id, Status.D);
+		return changeStatus(id, Status.DISABLE);
 	}
 	
 	/**
@@ -179,7 +178,7 @@ public class UserService extends AbstractBaseService<User, String> {
 	 */
 	@Transactional(readOnly = false)
 	public User enableUser(String id) throws Exception {
-		return changeStatus(id, Status.E);
+		return changeStatus(id, Status.ENABLE);
 	}
 
 	/**
@@ -238,13 +237,13 @@ public class UserService extends AbstractBaseService<User, String> {
     public List<User> findByText(String text) {
         if (HazeStringUtils.isBlank(text)) {
             Map<String, Object> map  = new HashMap<String, Object>();
-            map.put("status", Status.E);
+            map.put("status", Status.ENABLE);
 			map.put("group.name_asc", null);
 			map.put("sn_asc", null);
 			map.put("loginName_notEqual", User.ADMIN);
             return this.findAll(map);
         } else {
-            return this.userDao.findByUserNameOrGroupName("%" + text + "%", Status.E);
+            return this.userDao.findByUserNameOrGroupName("%" + text + "%", Status.ENABLE);
         }
     }
 }

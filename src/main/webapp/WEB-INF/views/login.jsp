@@ -133,6 +133,8 @@
 														<span class="block input-icon input-icon-right">
 															<input type="password" class="form-control" placeholder="密码" id="password" name="password"/>
 															<i class="ace-icon fa fa-lock"></i>
+                                                            <img src="${ctx}/validateCode" id="validatecode"/>
+                                                            <button onclick="refreshCode()" type="button">刷新</button>
 														</span>
                                                 </label>
 
@@ -383,6 +385,9 @@
             $('#btn-login-light').click();
         });
 
+        function refreshCode() {
+            $("#validatecode").attr('src',"${ctx}/validateCode?t="+Math.random());
+        }
     </script>
 </body>
 </html>

@@ -33,14 +33,21 @@ public class MessageSenderTest {
         messageSender.sendMessage(message);*/
         //messageSender.receiveMessage();
 
-        User user = new User();
+        /*User user = new User();
         user.setLoginName("zhangsan");
         user.setPassword("666666");
         user.setSex(Sex.M);
-        user.setStatus(Status.E);
+        user.setStatus(Status.ENABLE);
         userService.saveOrUpdate(user);
 
         String jql = "from User where name=:name";
-        userService.findByJql(jql, new HashMap<String, Object>());
+        userService.findByJql(jql, new HashMap<String, Object>());*/
+
+        User user = new User();
+        user.setLoginName("admin");
+        user.setName("系统管理员");
+        user.setStatus(Status.ENABLE);
+        user.setSex(Sex.M);
+        userService.save(user);
     }
 }

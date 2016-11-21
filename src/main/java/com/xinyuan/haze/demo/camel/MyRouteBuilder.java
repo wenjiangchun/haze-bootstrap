@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 public class MyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
-        //from("file:D:/aaa").process(new FileProcessor()).to("file:F:\\aaa");
+        //from("file:DISABLE:/aaa").process(new FileProcessor()).to("file:F:\\aaa");
     }
 
     class FileProcessor implements Processor {

@@ -55,7 +55,7 @@ public class GroupService extends AbstractBaseService<Group, String> {
 	 * @return List 机构和树节点信息列表
 	 */
 	public List<TreeNode> getTreeNode() {
-		List<Group> groups = this.findByProperty("status", Status.E);
+		List<Group> groups = this.findByProperty("status", Status.ENABLE);
 		List<TreeNode> treeNodes = new ArrayList<>();
 		for (Group g : groups) {
 			TreeNode treeNode = new TreeNode();
@@ -67,7 +67,7 @@ public class GroupService extends AbstractBaseService<Group, String> {
 			Set<User> users = g.getUsers();
 			users.addAll(userDao.findByProperty("bakGroupId", g.getId()));
 			for (User u : users) {
-				if (u.getStatus() == Status.E) {
+				if (u.getStatus() == Status.ENABLE) {
 					TreeNode treeNode1 = new TreeNode();
 					treeNode1.setId(u.getId());
 					treeNode1.setName(u.getName());
@@ -93,7 +93,7 @@ public class GroupService extends AbstractBaseService<Group, String> {
 		Set<User> users = g.getUsers();
 		users.addAll(userDao.findByProperty("bakGroupId", groupId));
 			for (User u : users) {
-				if (u.getStatus() == Status.E) {
+				if (u.getStatus() == Status.ENABLE) {
 					TreeNode treeNode1 = new TreeNode();
 					treeNode1.setId(u.getId());
 					treeNode1.setName(u.getName());

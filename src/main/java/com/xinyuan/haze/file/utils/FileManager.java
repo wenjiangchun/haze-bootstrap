@@ -3,6 +3,7 @@ package com.xinyuan.haze.file.utils;
 import com.xinyuan.haze.common.utils.HazeStringUtils;
 import com.xinyuan.haze.common.utils.OSUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOExceptionWithCause;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -289,5 +290,15 @@ public final class FileManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getExtension(Path path) throws IOException {
+        if (!Files.isReadable(path)) {
+            throw new IOException("文件不存在或不可读, Path=" + path);
+        }
+        if (Files.isDirectory(path)) {
+            throw new IOException("当前路径为文件夹, Path=" + path);
+        }
+        return FilenameUtils.getExtension(path.getFileName().toString()).toLowerCase();
     }
 }

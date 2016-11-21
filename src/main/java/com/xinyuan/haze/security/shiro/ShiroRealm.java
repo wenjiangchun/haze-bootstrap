@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.security.auth.login.AccountNotFoundException;
 
-import com.xinyuan.haze.system.exception.UserLoginNameExistException;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -52,12 +50,10 @@ public class ShiroRealm extends AuthorizingRealm {
 
         }
 		Status status = user.getStatus();
-		if (status == Status.D) { //账户禁用
+		if (status == Status.DISABLE) { //账户禁用
 			throw new DisabledAccountException();
 		}
-        else if (status == Status.I) { //账户失效
-			throw new ExpiredCredentialsException();
-		} else if (status == Status.L) { //账户冻结
+         else if (status == Status.LOCK) { //账户冻结
 			throw new LockedAccountException();
 		}
 		byte[] salt = EncodeUtils.decodeHex(user.getSalt());
@@ -77,14 +73,14 @@ public class ShiroRealm extends AuthorizingRealm {
 		Set<String> permissions = new HashSet<String>();
 
 		if (user.isSuperAdmin()) { // 超级用户
-			info.addRoles(roleService.findAllRoleNameByStatus(Status.E));
+			info.addRoles(roleService.findAllRoleNameByStatus(Status.ENABLE));
 			List<String> perms = resourceService.findAllPermission();
 			permissions.addAll(HazeStringUtils.getValue(perms, PERMS));
 
 		} else {
 			Set<String> perms = new HashSet<String>();
 			for (Role role : user.getRoles()) {
-				if (role.getStatus() == Status.E) {
+				if (role.getStatus() == Status.ENABLE) {
 					info.addRole(role.getCode());
 					perms.addAll(role.getAllPermissons());
 				}

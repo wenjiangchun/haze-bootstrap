@@ -8,23 +8,15 @@ package com.xinyuan.haze.system.utils;
  */
 public enum Status {
 
-	/**
-	 * 启用
-	 */
-	E("启用"), 
-	
-	/**
-	 * 禁用
-	 */
-	D("禁用"),
+	DISABLE("禁用"),
 
-	I("失效"),
+	ENABLE("启用"),
 
-	L("锁定");
+	LOCK("锁定");
 	
 	private String statusName;
 
-	private Status(String statusName) {
+	 Status(String statusName) {
 		this.statusName = statusName;
 	}
 
@@ -32,8 +24,4 @@ public enum Status {
 		return statusName;
 	}
 
-	public void setStatusName(String statusName) {
-		this.statusName = statusName;
-	}
-	
 }

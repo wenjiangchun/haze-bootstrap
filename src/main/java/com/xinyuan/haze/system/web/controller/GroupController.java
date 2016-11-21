@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import com.xinyuan.haze.HazeUtils;
+import com.xinyuan.haze.security.shiro.UserNotFoundException;
 import com.xinyuan.haze.system.service.UserService;
 import com.xinyuan.haze.web.utils.TreeNode;
 import org.apache.commons.lang3.StringUtils;
@@ -183,7 +184,7 @@ public class GroupController {
 			String userId = HazeUtils.getCurrentUser().getUserId();
 			Group g = userService.findById(userId).getGroup();
 			return this.groupService.getTreeNode(g.getId());
-		} catch (com.xinyuan.haze.security.shiro.CannotAnonymousAccessException e) {
+		} catch (UserNotFoundException e) {
 			return this.groupService.getTreeNode();
 		}
 	}

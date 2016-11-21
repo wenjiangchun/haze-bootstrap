@@ -16,14 +16,14 @@
     </context:component-scan>
 
     <bean id="scanner" class="com.xinyuan.haze.core.spring.utils.BeanScannerUtils">
-        <property name="packageName" value="${scanner.package}"/>
+        <property name="packageName" value="com.xinyuan"/>
     </bean>
 
 	<!-- Jpa Entity Manager Factory配置 -->
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
-		<property name="packagesToScan" ref="${scanner.packageName}"/>
+		<property name="packagesToScan" value="#{scanner.packageName}"/>
 		<property name="jpaDialect" ref="jpaDialect"/>
 		<property name="jpaProperties">
 			<props>

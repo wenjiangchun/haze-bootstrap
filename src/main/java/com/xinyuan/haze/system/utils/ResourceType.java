@@ -18,7 +18,7 @@ public enum ResourceType {
 	M("菜单资源");
 	private String typeName;
 	
-	private ResourceType(String typeName) {
+	ResourceType(String typeName) {
 		this.typeName = typeName;
 	}
 
@@ -26,8 +26,4 @@ public enum ResourceType {
 		return typeName;
 	}
 
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-	
 }

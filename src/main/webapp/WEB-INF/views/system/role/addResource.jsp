@@ -41,47 +41,6 @@
 			});
 		});
 		
-		function initResourceTree() {
-			  $.ajax({
-				  method : "post",
-				  url : "${ctx}/system/resource/getResources",
-				  dataType : "json",
-				  success : function(data) {
-					  if (data.length > 0) {
-						  var setting = {data:{
-							  simpleData:{
-								  enable:true,
-								  idKey:"id",
-								  pIdKey:"parentId",
-								  rootPId:null
-							  }
-						  }, 
-						  callback: {
-							  onClick:onClick
-						  }, 
-						  check: {
-							  chkStyle:"checkbox",
-							  enable:true
-						  }
-						  };
-						  $.fn.zTree.init($("#resourceTree"), setting, data);
-						  var tree = $.fn.zTree.getZTreeObj("resourceTree");
-						  tree.expandAll(true);
-						 // zTree.checkNode(nodes[i], true, false, callbackFlag);
-						 // var node = tree.getNodeByParam("id",parentId);
-						  $("input[name=resource]").each(function() {
-							  var id = $(this).val();
-							  var node = tree.getNodeByParam("id",id);
-							  tree.checkNode(node, true, false, true);
-						  });
-					  }
-				  }
-			  });	
-			
-			}
-		function onClick() {
-		}
-		
 		function backRoleList(){
 			window.location.href = "${ctx}/system/role/view";
 		}
@@ -119,6 +78,30 @@
 									<c:forEach items="${role.resources}" var="resource">
 									   <input type="hidden" name="resource" value="${resource.id}"/>
 									</c:forEach>
+                                    <form class="form-inline">
+                                    <table class="table table-hover table-bordered">
+                                        <tbody>
+                                        <c:forEach items="${menus}" var="menu">
+                                        <tr>
+                                            <td>
+                                                <label>
+                                                    <input type="checkbox" value="${menu.id}">${menu.name}
+                                                </label>
+
+                                            </td>
+                                            <td>
+                                                    <c:forEach items="${menu.childrens}" var="child">
+                                                        <label>
+                                                            <input type="checkbox" value="${child.id}"> ${child.name}
+                                                        </label>
+
+                                                    </c:forEach>
+                                            </td>
+                                        </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                    </form>
 								</div>
 							</div>
 				            <div class="form-group">

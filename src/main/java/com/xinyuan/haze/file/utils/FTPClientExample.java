@@ -64,7 +64,7 @@ public final class FTPClientExample
         "\t-k secs - use keep-alive timer (setControlKeepAliveTimeout)\n" +
         "\t-l - list files using LIST (remote is used as the pathname if provided)\n" +
         "\t     Files are listed twice: first in raw mode, then as the formatted parsed data.\n" +
-        "\t-L - use lenient future dates (server dates may be up to 1 day into future)\n" +
+        "\t-LOCK - use lenient future dates (server dates may be up to 1 day into future)\n" +
         "\t-n - list file names using NLST (remote is used as the pathname if provided)\n" +
         "\t-p true|false|protocol[,true|false] - use FTPSClient with the specified protocol and/or isImplicit setting\n" +
         "\t-s - store file on server (upload)\n" +
@@ -136,7 +136,7 @@ public final class FTPClientExample
                 listFiles = true;
                 minParams = 3;
             }
-            else if (args[base].equals("-L")) {
+            else if (args[base].equals("-LOCK")) {
                 lenient = true;
             }
             else if (args[base].equals("-n")) {

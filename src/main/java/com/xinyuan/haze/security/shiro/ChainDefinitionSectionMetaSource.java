@@ -28,8 +28,10 @@ public class ChainDefinitionSectionMetaSource implements FactoryBean<Section>{
 	
 	@Autowired
 	private ResourceService resourceService;
+
 	@Autowired
 	private RoleService roleService;
+
 	//shiro默认的链接定义
 	private String filterChainDefinitions;
 	
@@ -45,9 +47,9 @@ public class ChainDefinitionSectionMetaSource implements FactoryBean<Section>{
         for (Iterator<Resource> it = resources.iterator(); it.hasNext();) {
         	Resource resource = it.next();
         	if(StringUtils.isNotEmpty(resource.getUrl()) && StringUtils.isNotEmpty(resource.getPermission())) {
-        		//section.put(resource.getUrl(), "perms["+resource.getPermission()+"]");
-        		section.put(resource.getUrl(), resource.getPermission());
-        		section.put(resource.getUrl()+"/", resource.getPermission());
+        		section.put(resource.getUrl(), "perms["+resource.getPermission()+"]");
+        		//section.put(resource.getUrl(), resource.getPermission());
+        		//section.put(resource.getUrl()+"/", resource.getPermission());
         	}
         }
         

@@ -30,7 +30,7 @@ public class LoginController {
 		//SpringContextUtils.loadBeanDefinition("camel/applicationContext-camel.xml");
 		//SpringCamelContextUtils springCamelContextUtils = SpringContextUtils.getBean(SpringCamelContextUtils.class);
 		//springCamelContextUtils.getRouts();
-		SpringContextUtils.loadBeanDefinition("camel/applicationContext-camel.xml");
+		//SpringContextUtils.loadBeanDefinition("camel/applicationContext-camel.xml");
 		try {
 			//SpringCamelContextUtils.addRoute(null);
 		} catch (Exception e) {

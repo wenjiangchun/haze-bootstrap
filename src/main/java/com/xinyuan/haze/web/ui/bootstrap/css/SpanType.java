@@ -22,9 +22,9 @@ public enum SpanType {
 		if (null == status) {
 			return SpanType.DEFAULT;
 		}
-		if (status.equals(Status.E)) {
+		if (status.equals(Status.ENABLE)) {
 			return  SpanType.Success;
-		} else if (status.equals(Status.D)) {
+		} else if (status.equals(Status.DISABLE)) {
 			return SpanType.DEFAULT;
 		} else {
 			return SpanType.DEFAULT;

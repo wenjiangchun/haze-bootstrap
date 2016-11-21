@@ -4,11 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.xinyuan.haze.core.jpa.entity.SimpleBaseEntity;
 import com.xinyuan.haze.system.utils.Sex;
 import com.xinyuan.haze.system.utils.Status;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,8 +32,6 @@ import java.util.Set;
 @NamedEntityGraph(name = "User.detail",
         attributeNodes = @NamedAttributeNode("group"))
 public class User extends SimpleBaseEntity<String> {
-
-    private static final long serialVersionUID = 1L;
 
     /**
      * 超级管理员用户登录名。
@@ -102,6 +109,7 @@ public class User extends SimpleBaseEntity<String> {
         this.email = email;
     }
 
+    @Enumerated(EnumType.ORDINAL)
     public Status getStatus() {
         return status;
     }

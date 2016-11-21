@@ -44,7 +44,7 @@ public final class OSUtils {
         //获取操作系统信息并将操作系统信息放至{@code OS_PROPERTIES_MAP}中
         Properties properties = System.getProperties();
         properties.forEach((k, v) -> {
-            logger.debug("获取操作系统信息【key={},value={}】", k, v);
+            //logger.debug("获取操作系统信息【key={},value={}】", k, v);
             OS_PROPERTIES_MAP.put((String) k, v);
         });
         //加载完毕后使其内容不能被改变

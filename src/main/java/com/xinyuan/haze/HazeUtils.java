@@ -2,7 +2,7 @@ package com.xinyuan.haze;
 
 import org.apache.shiro.SecurityUtils;
 
-import com.xinyuan.haze.security.shiro.CannotAnonymousAccessException;
+import com.xinyuan.haze.security.shiro.UserNotFoundException;
 import com.xinyuan.haze.security.shiro.ShiroUser;
 import com.xinyuan.haze.system.entity.User;
 
@@ -11,21 +11,23 @@ import com.xinyuan.haze.system.entity.User;
  * @author Sofar
  *
  */
-public class HazeUtils {
+public final class HazeUtils {
 
-	private static final String ADMIN = "admin";
+	public static final String ADMIN = "admin";
+
+	public static final String DEFAULT_PASSWORD = "666666";
 
 	/**
 	 * 获取当前登陆用户
 	 * @return 当前用户
 	 * @throws Exception 
 	 */
-	public static ShiroUser getCurrentUser() throws CannotAnonymousAccessException {
-		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-		if (user == null) { 
-			throw new CannotAnonymousAccessException("找不到当前用户，请确保用户已登陆系统");
+	public static ShiroUser getCurrentUser() throws UserNotFoundException {
+		Object user = SecurityUtils.getSubject().getPrincipal();
+		if (user == null) {
+			throw new UserNotFoundException("找不到当前用户，请确保用户已登陆系统");
 		}
-		return user;
+		return (ShiroUser)user;
 	}
 	
 	/**
@@ -33,7 +35,7 @@ public class HazeUtils {
 	 * @param user
 	 * @return
 	 */
-	public static boolean isSuperAdmin(User user) {
+	public static boolean isAdmin(User user) {
 		return user.getLoginName().equals(ADMIN);
 	}
 

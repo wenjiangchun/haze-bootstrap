@@ -87,7 +87,7 @@ public class Group extends SimpleBaseEntity<String> {
     /**
      * 机构状态
      */
-    private Status status = Status.E;
+    private Status status = Status.ENABLE;
 
     @Column(unique = true)
     public String getName() {

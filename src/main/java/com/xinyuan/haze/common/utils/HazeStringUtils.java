@@ -33,7 +33,10 @@ public class HazeStringUtils extends StringUtils {
 		}
 		Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(StringUtils.join(obj, ","));
-        while(matcher.find()){
+		for (String s : obj) {
+			result.add("perms[" + s + "]");
+		}
+		while(matcher.find()){
         	result.add(matcher.group(1));
         }
 		return result;

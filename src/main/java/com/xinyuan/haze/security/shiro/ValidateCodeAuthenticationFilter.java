@@ -48,7 +48,7 @@ public class ValidateCodeAuthenticationFilter extends FormAuthenticationFilter{
 		
 		boolean disableValidateCode = false;
 		Config config = configService.findByCode(DEFAULT_VALIDATE_CODE_PARAM);
-		if (null != config && Status.E.name().equalsIgnoreCase(config.getValue())) {
+		if (null != config && Status.ENABLE.name().equalsIgnoreCase(config.getValue())) {
 			disableValidateCode = true;
 		}
 		if (disableValidateCode) { //判断系统是否启用验证码

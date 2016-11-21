@@ -104,13 +104,8 @@ public class RoleController {
 		Role role = this.roleService.findById(id);
 		List<Resource> menus = this.resourceService.findMenuResources();
 		List<Resource> newMenus = new ArrayList<Resource>();
-		for (Resource r : menus) {
-			if (StringUtils.isEmpty(r.getUrl())) {
-				newMenus.add(r);
-			}
-		}
 		model.addAttribute("role",role);
-		model.addAttribute("menus", newMenus);
+		model.addAttribute("menus", menus);
 		return "system/role/addResource";
 	}
 	

@@ -99,7 +99,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "add", method = RequestMethod.GET)
 	public String add(Model model, ServletRequest request) {
-		List<Role> roleList = this.roleService.findByStatus(Status.E); //查找所有启用状态的角色
+		List<Role> roleList = this.roleService.findByStatus(Status.ENABLE); //查找所有启用状态的角色
 		List<Group> groupList = this.groupService.findAll();
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("sexs", Sex.values());
@@ -162,7 +162,7 @@ public class UserController {
 	@RequestMapping(value = "addRoles/{id}", method = RequestMethod.GET)
 	public String addRoles(@PathVariable("id")String id, Model model) {
 		User user = this.userService.findById(id);
-		List<Role> roleList = this.roleService.findByStatus(Status.E);
+		List<Role> roleList = this.roleService.findByStatus(Status.ENABLE);
 		Group group = user.getGroup();
 		if(group != null){
 			model.addAttribute("groupId", group.getId());

@@ -72,7 +72,6 @@ public class ResourceController {
 		if (resource.getParent() != null && StringUtils.isBlank(resource.getParent().getId())) {
 			resource.setParent(null);
 		}
-		
 		try {
 			this.resourceService.saveOrUpdate(resource);
             return WebMessage.createSuccessWebMessage();
