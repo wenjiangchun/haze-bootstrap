@@ -45,7 +45,8 @@ public class QrtzScheduleService {
 	 * quartz默认组名称
 	 */
 	public static final String DEFAULT_GROUP = Scheduler.DEFAULT_GROUP;
-	
+
+	@Autowired
 	private Scheduler scheduler;
 	
 	/**
@@ -66,7 +67,8 @@ public class QrtzScheduleService {
 		if (HazeStringUtils.isNotEmpty(description)) {
 			jobBuilder.withDescription(description);
 		}
-		jobBuilder.storeDurably(qrtzJobDetail.getIsDurable());
+		//jobBuilder.storeDurably(qrtzJobDetail.getIsDurable());
+		jobBuilder.storeDurably(true);
 		scheduler.addJob(jobBuilder.build(), replace);
 		logger.debug("add jobDetail,jobDetail name is {},job Group is {}", jobName, jobGroup);
 	}

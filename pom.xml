@@ -380,7 +380,7 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>com.xinyuan.jaxb2</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <version>2.2</version>
@@ -392,7 +392,7 @@
                         </goals>
                     </execution>
                 </executions>
-                <!--<configuration>
+                &lt;!&ndash;<configuration>
                     <schemaSourceExcludeFilters>
                         <noJaxbIndex implementation="org.codehaus.mojo.jaxb2.shared.filters.pattern.PatternFileFilter">
                             <patterns>
@@ -400,8 +400,8 @@
                             </patterns>
                         </noJaxbIndex>
                     </schemaSourceExcludeFilters>
-                </configuration>-->
-            </plugin>
+                </configuration>&ndash;&gt;
+            </plugin>-->
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>

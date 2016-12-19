@@ -46,7 +46,7 @@ public class HazeSpecification<T extends BaseEntity<?>> implements Specification
 				if (HazeStringUtils.isNotEmpty(key)) {
 					Predicate predicate = null;
 					Path expression = null;
-                       if ("or".equalsIgnoreCase(operator)) {
+                       if (operator.equalsIgnoreCase("or")) {
 						   Path expression1 = null;
 						   Path expression2 = null;
 						   try {
@@ -107,7 +107,9 @@ public class HazeSpecification<T extends BaseEntity<?>> implements Specification
 						   } else if ("notEqual".equalsIgnoreCase(operator)) {
 							   predicate = cb.notEqual(expression, queryValue);
 						   } else if ("in".equalsIgnoreCase(operator)) {
-							   predicate = expression.in(queryValue);
+							   if (expression != null) {
+								   predicate = expression.in(queryValue);
+							   }
 						   } else if ("greatThan".equalsIgnoreCase(operator)){
 							   predicate = cb.greaterThan(expression, (Date)queryValue);
 						   } else if ("between".equalsIgnoreCase(operator)){

@@ -73,7 +73,7 @@
 <div class="page-content">
     <div class="row">
         <div class="col-xs-10">
-            <form:form id="inputForm" modelAttribute="jobDetail" action="${ctx}/schedule/jobDetail/save" method="post" class="form-horizontal">
+            <form:form id="inputForm" modelAttribute="jobDetail" action="${ctx}/quartz/jobDetail/save" method="post" class="form-horizontal">
                 <fieldset>
                     <legend><fmt:message key="add" /><fmt:message key="jobDetail" /></legend>
                     <div class="control-group">
