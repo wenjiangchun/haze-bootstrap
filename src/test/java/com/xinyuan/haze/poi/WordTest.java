@@ -24,7 +24,6 @@ import java.util.List;
  */
 public class WordTest {
 
-    @Test
     public void test() throws Exception {
         String input = "/home/sofar/技术规范发布稿.doc";
         String out = "/home/sofar/aaa.html";

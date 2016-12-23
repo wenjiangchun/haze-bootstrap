@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
  * Created by Sofar on 2016/10/20.
  */
 public class IndexCreatorTest {
-    @Test
     public void createIndex() throws Exception {
 
         String file = "d:\\aaa";

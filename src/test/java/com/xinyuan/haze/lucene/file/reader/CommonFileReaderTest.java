@@ -19,7 +19,6 @@ import java.nio.file.StandardOpenOption;
  * Created by Sofar on 2016/10/20.
  */
 public class CommonFileReaderTest {
-    @Test
     public void getContent() throws Exception {
 
        /* CommonFileReader reader = new CommonFileReader();

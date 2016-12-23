@@ -29,7 +29,6 @@ import java.util.*;
  */
 public class PoiTest {
 
-    @Test
     public void testProcess() throws Exception {
         String basePackage = "com.xinyuan";
         String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +

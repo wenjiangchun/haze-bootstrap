@@ -25,7 +25,6 @@ public class MessageSenderTest {
     private MessageSender messageSender;
     @Autowired
     private UserService userService;
-    @Test
     public void testSendMessage() throws Exception {
 /*JmsMessage message = new JmsMessage();
         message.setKey("testKey");

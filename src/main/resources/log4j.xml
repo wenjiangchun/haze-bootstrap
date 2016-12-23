@@ -17,15 +17,15 @@
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework">
-		<level value="warn" />
+		<level value="trace" />
 	</logger>
 	
 
 	<logger name="org.hibernate.SQL">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 	<logger name="org.apache.shiro">
-		<level value="trace"/>
+		<level value="warn"/>
 	</logger>
 	<!-- Root Logger -->
 	<root>

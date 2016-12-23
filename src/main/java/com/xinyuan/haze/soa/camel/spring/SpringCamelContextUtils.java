@@ -85,7 +85,6 @@ public class SpringCamelContextUtils implements CamelContextAware, InitializingB
                 if (name.getRouteContext().getRoute().getStatus(camelContext) == ServiceStatus.Stopped) {
                     camelContext.removeRoute(name.getId());
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
