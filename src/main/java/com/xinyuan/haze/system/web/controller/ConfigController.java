@@ -72,7 +72,7 @@ public class ConfigController {
 		} catch (Exception e) {
             return WebMessage.createErrorWebMessage(e.getMessage());
 		}
-		
+
 	}
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)

@@ -16,10 +16,10 @@ import javax.jms.*;
 @Component
 public class MessageSender {
 
-    @Autowired
+    @Autowired(required = false)
     private JmsTemplate jmsTemplate;
 
-    @Autowired
+    @Autowired(required = false)
     ActiveMQConnectionFactory connectionFactory;
 
     public void sendMessage(final JmsMessage jmsMessage) {

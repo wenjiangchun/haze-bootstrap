@@ -25,7 +25,7 @@ import java.util.List;
  * @author sofar
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class ConfigService extends AbstractBaseService<Config, String> {
 
 	private ConfigDao configDao;
@@ -61,7 +61,7 @@ public class ConfigService extends AbstractBaseService<Config, String> {
 	 * @throws com.xinyuan.haze.core.jpa.service.HazeServiceException 当保存配置对象名称已存在时抛出该异常
 	 */
 	@CachePut(value="configCache",key="#config.code")
-	@Transactional(readOnly=false)
+	@Transactional
 	public Config saveOrUpdate(Config config) throws Exception {
 		Assert.notNull(config);
 		Config c = this.findByCode(config.getCode());

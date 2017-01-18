@@ -1,6 +1,5 @@
 package com.xinyuan.haze.web.controller;
 
-import com.xinyuan.haze.core.spring.utils.SpringContextUtils;
 import com.xinyuan.haze.system.entity.Resource;
 import com.xinyuan.haze.system.service.ResourceService;
 import org.apache.shiro.session.Session;
@@ -89,5 +88,16 @@ public class HomeController {
 			}
 		}
 		return onlineUsers;
+    }
+
+    private void say1() {
+		System.out.println("测试信息");
+	}
+
+	private void say2() {
+        System.out.println("Hellllllllll");
+    }
+    private void say3() {
+        System.out.println("发士大夫撒地方撒旦");
     }
 }

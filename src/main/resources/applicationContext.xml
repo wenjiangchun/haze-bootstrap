@@ -104,10 +104,9 @@
 
     <!-- unit test环境 -->
     <beans profile="test">
-        <context:property-placeholder ignore-resource-not-found="true"
-                                      location="classpath*:/application.test.properties" />
+        <context:property-placeholder ignore-resource-not-found="true" location="classpath*:/application.test.properties" value-separator=":"/>
         <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-            <property name="driverClass" value="${jdbc.driver}" />
+            <property name="driverClass" value="${jdbc.driver:}" />
             <property name="url" value="${jdbc.url}" />
             <property name="username" value="${jdbc.username}" />
             <property name="password" value="${jdbc.password}" />

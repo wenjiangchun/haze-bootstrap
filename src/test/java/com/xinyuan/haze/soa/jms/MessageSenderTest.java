@@ -25,6 +25,7 @@ public class MessageSenderTest {
     private MessageSender messageSender;
     @Autowired
     private UserService userService;
+    @Test
     public void testSendMessage() throws Exception {
 /*JmsMessage message = new JmsMessage();
         message.setKey("testKey");
@@ -43,7 +44,7 @@ public class MessageSenderTest {
         userService.findByJql(jql, new HashMap<String, Object>());*/
 
         User user = new User();
-        user.setLoginName("admin");
+        user.setLoginName("admin11");
         user.setName("系统管理员");
         user.setStatus(Status.ENABLE);
         user.setSex(Sex.M);
