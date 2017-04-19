@@ -43,7 +43,7 @@ public class ConfigService extends AbstractBaseService<Config, String> {
 	 */
 	@Cacheable(value="configCache",key="#code")
 	public Config findByCode(String code) {
-        Assert.notNull(code);
+        Assert.notNull(code, "配置代码不能为空");
         List<Config> configList = this.configDao.findByProperty("code", code);
         if (configList.isEmpty()) {
             logger.error("配置代码为[{}]的配置对象不存在，请添加对应配置信息！", code);
@@ -63,7 +63,7 @@ public class ConfigService extends AbstractBaseService<Config, String> {
 	@CachePut(value="configCache",key="#config.code")
 	@Transactional
 	public Config saveOrUpdate(Config config) throws Exception {
-		Assert.notNull(config);
+		Assert.notNull(config, "配置信息不能为null");
 		Config c = this.findByCode(config.getCode());
 		if (c != null && config.isNew()) {
 			logger.error("配置代码{}已存在！",config.getCode());
@@ -86,7 +86,7 @@ public class ConfigService extends AbstractBaseService<Config, String> {
     @CacheEvict(value="configCache",allEntries=true)
 	@Transactional(readOnly=false)
 	public Config deleteConfig(String id) throws Exception {
-		Assert.notNull(id);
+		Assert.notNull(id, "配置ID不能为空");
 		Config config = this.findById(id);
 	    return this.deleteConfig(config);
 	}
@@ -149,7 +149,7 @@ public class ConfigService extends AbstractBaseService<Config, String> {
 	@CacheEvict(value="configCache",key="#config.code")
 	@Transactional(readOnly=false)
 	public Config updateConfig(Config config) throws Exception {
-		Assert.notNull(config);
+		Assert.notNull(config, "配置信息不能为null");
 		String id = config.getId();
 		Config cfg = this.findById(id);
 		cfg.setValue(config.getValue());

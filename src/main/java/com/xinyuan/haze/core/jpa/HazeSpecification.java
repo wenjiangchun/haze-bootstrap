@@ -152,7 +152,7 @@ public class HazeSpecification<T extends BaseEntity<?>> implements Specification
 	 * @return 包含实体属性名称和操作符的数组如{name,like}
 	 */
 	private String[] getAttributeAndOperator(String key) {
-		if (key.indexOf(SPLIT) == -1) {
+		if (!key.contains(SPLIT)) {
 			return new String[]{key,"equal"};
 		}
 		return key.split(SPLIT);

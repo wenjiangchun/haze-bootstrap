@@ -60,7 +60,7 @@
     <!-- production环境 -->
     <beans profile="production,development">
 		<context:property-placeholder ignore-resource-not-found="true"
-									  location="classpath*:/application.properties" />
+									  location="classpath*:/application.properties,classpath*:/redis/redis.properties" />
         <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
             <property name="driverClass" value="${jdbc.driver}" />
             <property name="jdbcUrl" value="${jdbc.url}" />
@@ -104,7 +104,7 @@
 
     <!-- unit test环境 -->
     <beans profile="test">
-        <context:property-placeholder ignore-resource-not-found="true" location="classpath*:/application.test.properties" value-separator=":"/>
+        <context:property-placeholder ignore-resource-not-found="true" location="classpath*:/application.test.properties,classpath*:/redis/redis.properties" value-separator=":"/>
         <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
             <property name="driverClass" value="${jdbc.driver:}" />
             <property name="url" value="${jdbc.url}" />

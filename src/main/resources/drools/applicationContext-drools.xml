@@ -1,0 +1,16 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:kie="http://drools.org/schema/kie-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+http://drools.org/schema/kie-spring http://drools.org/schema/kie-spring.xsd">
+        <kie:kmodule id="kModule">
+            <kie:kbase name="kBase" packages="drools">
+                <kie:ksession name="kSession" type="stateful">
+                    <kie:consoleLogger />
+                </kie:ksession>
+            </kie:kbase>
+        </kie:kmodule>
+    <bean id="kiePostProcessor"
+          class="org.kie.spring.annotations.KModuleAnnotationPostProcessor"/>
+</beans>

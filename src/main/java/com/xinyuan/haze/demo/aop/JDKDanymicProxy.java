@@ -42,6 +42,6 @@ public class JDKDanymicProxy implements InvocationHandler {
 
     public static void main(String[] args) {
         Greeting greeting = new JDKDanymicProxy(new GreetingImpl()).getProxy();
-        greeting.sayHello();
+    greeting.sayHello();
     }
 }

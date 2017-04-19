@@ -24,7 +24,7 @@ public class SimpleScheduleDemo extends Thread {
 	 * 每天下午4点到5点每分钟执行一次
 	 */
     //@Scheduled(cron="${cron}")
-	public synchronized  void testCronRun() {
+	public synchronized void testCronRun() {
 		logger.debug("task demo running at per/1mininus of PM16-PM17");
         FTPUtils.downloadFiles("/home/sofar/下载/ftp", "/447266/ftp");
 	}

@@ -19,6 +19,10 @@ import java.io.Serializable;
 public class BaseRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I extends Serializable>
 		extends JpaRepositoryFactoryBean<R, T, I> {
 
+	public BaseRepositoryFactoryBean(Class<? extends R> repositoryInterface) {
+		super(repositoryInterface);
+	}
+
 	@SuppressWarnings("rawtypes")
 	protected RepositoryFactorySupport createRepositoryFactory(
 			EntityManager entityManager) {

@@ -10,8 +10,9 @@ import static org.junit.Assert.*;
 public class SelectSortTest {
     @Test
     public void sort() throws Exception {
-        String[] c = new String[]{"A","T", "ENABLE", "I", "O", "Q", "P",  "G", "B"};
-        SelectSort selectSort = new SelectSort();
+        String[] c = new String[]{"T","A", "E", "I", "O", "Q", "P",  "G", "B"};
+        //AbstractSort selectSort = new SelectSort();
+        AbstractSort selectSort = new BubbleSort();
         selectSort.sort(c);
     }
 

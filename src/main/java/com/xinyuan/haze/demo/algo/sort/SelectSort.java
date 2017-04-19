@@ -4,19 +4,25 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 /**
- * Created by Sofar on 2016/10/8.
+ * 选择排序
  */
 public class SelectSort extends AbstractSort {
 
     @Override
     public void sort(Comparable[] c) {
+        int n = 0;
         for (int i = 0; i < c.length; i++) {
-            for (int j = i; j < c.length; j++) {
-                if (less(c[j], c[i])) {
-                    logger.log(Level.INFO, "第" + i + "次排序，交换" + c[j] + " ; " + c[i]);
-                    exchange(c, i, j);
+            int min = i;
+            for (int j = i + 1; j < c.length; j++) {
+                if (less(c[j], c[min])) {
+                    min = j;
                 }
-                logger.log(Level.INFO, Arrays.toString(c));
+            }
+            if (min != i) {
+                logger.info("执行第" + ++n + "次交换");
+                logger.info("交换前。。。" + Arrays.toString(c));
+                exchange(c, i, min);
+                logger.info("交换后。。。" + Arrays.toString(c));
             }
         }
     }

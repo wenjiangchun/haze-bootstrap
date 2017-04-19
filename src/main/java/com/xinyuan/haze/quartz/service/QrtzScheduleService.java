@@ -46,7 +46,7 @@ public class QrtzScheduleService {
 	 */
 	public static final String DEFAULT_GROUP = Scheduler.DEFAULT_GROUP;
 
-	@Autowired
+	@Autowired(required = false)
 	private Scheduler scheduler;
 	
 	/**

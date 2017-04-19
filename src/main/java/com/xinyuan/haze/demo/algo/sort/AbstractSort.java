@@ -1,6 +1,5 @@
 package com.xinyuan.haze.demo.algo.sort;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -22,6 +21,5 @@ public abstract class AbstractSort {
         Comparable t = c[i];
         c[i] = c[j];
         c[j] = t;
-        //logger.log(Level.ALL, c.toString());
     }
 }

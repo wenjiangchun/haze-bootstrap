@@ -189,12 +189,10 @@
 			</ul>
 		</li>
 
-
 		<li class="">
 			<a href="#" class="dropdown-toggle">
 				<i class="menu-icon"></i>
 				<span class="menu-text"> Demo演示 </span>
-
 				<b class="arrow fa fa-angle-down"></b>
 			</a>
 
@@ -206,6 +204,14 @@
 						<i class="menu-icon fa fa-caret-right"></i>
 						<i class="fa fa-barcode"></i>
 						二维码演示
+					</a>
+					<b class="arrow"></b>
+				</li>
+				<li class="">
+					<a href="${ctx}/map/view/" id="viewMap_Menu">
+						<i class="menu-icon fa fa-caret-right"></i>
+						<i class="fa fa-barcode"></i>
+						地图演示
 					</a>
 					<b class="arrow"></b>
 				</li>

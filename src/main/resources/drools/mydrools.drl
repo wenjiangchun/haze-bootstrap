@@ -1,0 +1,25 @@
+package drools;
+import com.xinyuan.haze.demo.drools.Access;
+import com.xinyuan.haze.demo.drools.AccessResult;
+
+rule "mydrools"
+    when
+     user:Access(name=="aaa");
+    then
+     user.setName("bbb");
+     AccessResult accessResult = new AccessResult();
+     accessResult.setMessage("不能出库");
+     accessResult.setResult(false);
+     insert(accessResult);
+end
+
+rule "mydrools1"
+    when
+     user:Access(name=="aaa");
+    then
+     user.setName("ccc");
+     AccessResult accessResult = new AccessResult();
+     accessResult.setMessage("不能出库1");
+     accessResult.setResult(false);
+     insert(accessResult);
+end

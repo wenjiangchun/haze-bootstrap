@@ -29,8 +29,8 @@
 			</bean>
 		</mvc:message-converters>
 		<!-- 处理responseBody 里面日期类型 -->
-	</mvc:annotation-driven>  
-	
+	</mvc:annotation-driven>
+
     <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">  
         <constructor-arg value="UTF-8" index="0"></constructor-arg>
         <property name="supportedMediaTypes">  
@@ -77,7 +77,7 @@
 	
 	<!-- 定义无Controller的path<->view直接映射 -->
 	<mvc:view-controller path="/" view-name="index"/>
-	<mvc:view-controller path="/web/mashup-client" view-name="/web/mashup-client"/>
+	<!--<mvc:view-controller path="/web/mashup-client" view-name="/resources/mashup-client"/>-->
 	
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
 		<property name="exceptionMappings">  

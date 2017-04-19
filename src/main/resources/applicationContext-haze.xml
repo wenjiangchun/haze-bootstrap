@@ -7,10 +7,12 @@
 
     <import resource="shiro/applicationContext-shiro.xml"/>
 	<import resource="schedule/applicationContext-schedule.xml"/>
-	<import resource="schedule/applicationContext-quartz.xml"/>
+	<!--<import resource="schedule/applicationContext-quartz.xml"/>-->
     <import resource="ehcache/applicationContext-ehcache.xml"/>
     <import resource="activiti/applicationContext-activiti.xml"/>
     <import resource="ws/applicationContext-ws.xml"/>
+    <import resource="redis/applicationContext-redis.xml"/>
+    <import resource="drools/applicationContext-drools.xml"/>
     <!--<import resource="camel/applicationContext-camel.xml"/>-->
    <!-- <import resource="jms/applicationContext-jms.xml"/>-->
 </beans>
