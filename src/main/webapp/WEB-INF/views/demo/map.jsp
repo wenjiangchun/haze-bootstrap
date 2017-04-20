@@ -14,8 +14,8 @@
         }
     </style>
 
-    <link href="${ctx}/resources/arcgis_js_api/library/4.3/4.3/esri/css/main.css" rel="stylesheet" type="text/css">
-    <script src="${ctx}/resources/arcgis_js_api/library/4.3/4.3/init.js"></script>
+    <link href="http://121.42.151.97:8080/arcgis_js_api/library/4.3/4.3/esri/css/main.css" rel="stylesheet" type="text/css">
+    <script src="http://121.42.151.97:8080/arcgis_js_api/library/4.3/4.3/init.js"></script>
 
     <script>
         require([
