@@ -30,7 +30,7 @@
 				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
 				<prop key="net.sf.ehcache.configurationResourceName">ehcache/ehcache.xml</prop>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="hibernate.cache.use_query_cache">false</prop>
 				<prop key="hibernate.cache.use_second_level_cache">false</prop>
 				<prop key="hibernate.generate_statistics">false</prop>
@@ -67,12 +67,20 @@
             <property name="user" value="${jdbc.username}" />
             <property name="password" value="${jdbc.password}" />
         </bean>-->
-		<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass" value="${jdbc.driver}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+		</bean>
+
+		<!--<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
 			<property name="password" value="${jdbc.password}" />
 
-			<!--<property name="filters" value="stat" />-->
+			&lt;!&ndash;<property name="filters" value="stat" />&ndash;&gt;
             <property name="filters" value="log4j" />
             <property name="proxyFilters">
                 <list>
@@ -94,12 +102,12 @@
 
 			<property name="poolPreparedStatements" value="false" />
 			<property name="maxOpenPreparedStatements" value="20" />
-            <!--<property name="connectionProperties" value="druid.stat.slowSqlMillis=2000" />-->
+            &lt;!&ndash;<property name="connectionProperties" value="druid.stat.slowSqlMillis=2000" />&ndash;&gt;
 		</bean>
         <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
             <property name="slowSqlMillis" value="10000" />
             <property name="logSlowSql" value="true" />
-        </bean>
+        </bean>-->
     </beans>
 
     <!-- unit test环境 -->
